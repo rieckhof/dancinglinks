@@ -5,39 +5,43 @@
 #include<unordered_map>
 #include <vector>
 #include <algorithm>
+#include <vector>
+#include <iostream>
 
 namespace sudoku::dancinglinks {
 
 class DancingLinks
 {
-
+    std::vector<char> letters;
 public:
 
     struct ColumnObj{
-
-    };
-
-    struct Header{
-        int size {-1};
-        int name {-1};
-        std::shared_ptr<Header> right;
-        std::shared_ptr<Header> left;
+        int size {0};
+        std::string name {""};
+        int index {0};
+        std::shared_ptr<ColumnObj> right;
+        std::shared_ptr<ColumnObj> left;
         std::shared_ptr<ColumnObj> down;
         std::shared_ptr<ColumnObj> up;
-        std::shared_ptr<ColumnObj> col_first;
+        std::shared_ptr<ColumnObj> top;
     };
+    std::vector<std::shared_ptr<ColumnObj>> objs;
 
-
-    std::shared_ptr<Header> root {std::make_shared<Header>()};
+    std::shared_ptr<ColumnObj> root {std::make_shared<ColumnObj>()};
     std::unordered_map<size_t,ColumnObj> index;
 
 
-    DancingLinks() = default;
+    DancingLinks() : letters (35){
+        int begin (65);
+        std::generate_n(letters.begin(), 35, [&begin](){
+            return static_cast<char>(begin++);
+        });
+    }
 
     void make_header(size_t size){
-        std::shared_ptr<Header> last;
+        std::shared_ptr<ColumnObj> last;
         for(size_t i = 0; i < size; ++i){
-            std::shared_ptr<Header> nu = std::make_shared<Header>();
+            std::shared_ptr<ColumnObj> nu = std::make_shared<ColumnObj>();
             if (i == 0){
                 insert(root, nu, i);
                 last = nu;
@@ -49,18 +53,23 @@ public:
                 insert(last, nu, i);
                 last = nu;
             }
+            objs.push_back(nu);
         }
     }
 
+    void insert(std::shared_ptr<ColumnObj>& last, std::shared_ptr<ColumnObj>& nu, size_t index){
+        last->right = nu;
+        nu->left = last;
+        nu->name = letters.at(index);
+        nu->index = index;
+    }
+
     ColumnObj make_row(size_t row_index, std::vector<uint16_t> data){
-        std::vector<size_t> index_ones;
-        long number_of_ones = std::count_if(data.begin(),data.end(),[](uint16_t i){
-           return i == 1;
-        });
-        index_ones.reserve(number_of_ones);
+        std::shared_ptr<ColumnObj> first_spacer = std::make_shared<ColumnObj>();
+        first_spacer->index = 0;
         for(size_t  i = 0; i < data.size(); ++i){
             if(data.at(i) == 1){
-                index_ones.push_back(i);
+
             }
         }
 //        auto last_index = index_ones.back();
@@ -90,11 +99,7 @@ public:
 //        }
     }
 
-    void insert(std::shared_ptr<Header>& last, std::shared_ptr<Header>& nu, size_t name){
-        last->right = nu;
-        nu->left = last;
-        nu->name = name;
-    }
+
 
 
 };
