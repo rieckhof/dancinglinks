@@ -7,25 +7,30 @@
 #include <algorithm>
 #include <vector>
 #include <iostream>
+#include <cassert>
 
 namespace sudoku::dancinglinks {
 
 class DancingLinks
 {
     std::vector<char> letters;
+    int spacer_counter{0};
+    size_t header_size{0}; // no root
 public:
 
     struct ColumnObj{
         int size {0};
         std::string name {""};
-        int index {0};
+        int32_t index {0};
+        int32_t top_spacer {0};
+        bool is_header {false};
         std::shared_ptr<ColumnObj> right;
         std::shared_ptr<ColumnObj> left;
         std::shared_ptr<ColumnObj> down;
         std::shared_ptr<ColumnObj> up;
         std::shared_ptr<ColumnObj> top;
     };
-    std::vector<std::shared_ptr<ColumnObj>> objs;
+    std::vector<std::shared_ptr<ColumnObj>> objs; //begin() ColumnObj->index = 1
 
     std::shared_ptr<ColumnObj> root {std::make_shared<ColumnObj>()};
     std::unordered_map<size_t,ColumnObj> index;
@@ -55,48 +60,65 @@ public:
             }
             objs.push_back(nu);
         }
+        header_size = objs.size();
     }
 
     void insert(std::shared_ptr<ColumnObj>& last, std::shared_ptr<ColumnObj>& nu, size_t index){
         last->right = nu;
         nu->left = last;
         nu->name = letters.at(index);
-        nu->index = index;
+        nu->index = index +1;
+        nu->is_header = true;
     }
 
-    ColumnObj make_row(size_t row_index, std::vector<uint16_t> data){
-        std::shared_ptr<ColumnObj> first_spacer = std::make_shared<ColumnObj>();
-        first_spacer->index = 0;
+    std::shared_ptr<ColumnObj> get_last(std::shared_ptr<ColumnObj> obj){
+        if(obj->down == nullptr)
+            return obj;
+        std::shared_ptr<ColumnObj>& iterator = obj;
+        while(iterator){
+            if(!iterator->down){
+                return iterator;
+            }
+            iterator = iterator->down;
+        }
+    }
+
+    std::shared_ptr<ColumnObj> get_last_spacer(){
+        auto result = std::find_if(objs.rbegin(), objs.rend(),
+                             [](std::shared_ptr<ColumnObj>& obj){
+                                return obj->index < 0;
+                            });
+        return result == objs.rend() ? nullptr : *result;
+    }
+
+    std::shared_ptr<ColumnObj>& get_header(int32_t index){
+        assert(index > 0);
+        return objs.at(index - 1);
+    }
+
+    void make_row(std::vector<uint16_t>& data){
+        assert(data.size() == header_size);
+        int last_index{objs.back()->index};
+        std::shared_ptr<ColumnObj> spacer = std::make_shared<ColumnObj>();
+        spacer->up = get_last_spacer();
+        spacer->top_spacer = spacer_counter--;
+        spacer->index = ++last_index;
+        objs.push_back(spacer);
+
+        std::shared_ptr<ColumnObj> last_obj;
         for(size_t  i = 0; i < data.size(); ++i){
             if(data.at(i) == 1){
-
+                std::shared_ptr<ColumnObj>& header = objs.at(i);
+                auto last = get_last(header);
+                std::shared_ptr<ColumnObj> new_obj = std::make_shared<ColumnObj>();
+                new_obj->top = header;
+                new_obj->up = last;
+                new_obj->index = ++last_index;
+                last->down = new_obj;
+                objs.push_back(new_obj);
             }
         }
-//        auto last_index = index_ones.back();
-//        std::shared_ptr<ColumnObj> last_element;
-//        for(size_t const& i : index_ones){
-//            std::shared_ptr<Header> head = root;
-//            while(head){
-//                if(head->name == i){
-//                    std::shared_ptr<ColumnObj> col_new = std::make_shared<ColumnObj>();
-//                    if(last_element){
-//                        last_element->down = col_new;
-//                        col_new->up = last_element;
-
-//                        last_element->right = col_new;
-//                        col_new->left = last_element;
-//                        last_element = col_new;
-
-//                    }else{
-//                        last_element = col_new;
-//                        head->down = col_new;
-//                        head->col_head = col_new;
-//                        col_new->up = head;
-//                    }
-//                }
-//                head = std::dynamic_pointer_cast<Header>(head->right);
-//            }
-//        }
+        spacer->down =  last_obj;
     }
 
 
