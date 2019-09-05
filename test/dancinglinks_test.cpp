@@ -55,7 +55,7 @@ TEST(DancingLinksShould, make_line_cerates_line){
     ASSERT_EQ(dl.get_object(8)->up->index, 6);
 }
 
-std::vector<size_t> check(std::shared_ptr<DancingLinks::ColumnObj> iterator_down, std::shared_ptr<DancingLinks::ColumnObj>const& iterator){
+std::vector<size_t> create_test_results(std::shared_ptr<DancingLinks::ColumnObj> iterator_down, std::shared_ptr<DancingLinks::ColumnObj>const& iterator){
     std::vector<size_t> result;
     while(iterator_down and iterator_down != iterator){
        result.push_back(iterator_down->index);
@@ -68,7 +68,7 @@ void check_all(std::shared_ptr<DancingLinks::ColumnObj>const& iterator, std::vec
 {
     std::vector<size_t> result;
     result.push_back(iterator->index);
-    auto temp = check(iterator->down, iterator);
+    auto temp = create_test_results(iterator->down, iterator);
     result.insert(result.end(), temp.begin(), temp.end());
     EXPECT_EQ(result,expected_values);
 }

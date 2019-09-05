@@ -44,7 +44,7 @@ TEST(Serializershoudl, serializeBoardtoJson) {
   std::string result{s::serialize(b)};
   EXPECT_EQ(result, expected);
 }
-void check(Board const &result, std::vector<matrix_value_depth> const &expected,
+void create_result(Board const &result, std::vector<matrix_value_depth> const &expected,
            uint16_t line) {
   std::vector<matrix_value_depth> real;
   result.get_column(line, real);
@@ -70,9 +70,9 @@ TEST(SerializerShould, deserializeJsonToBoard) {
                     "\"8\":[[],[],[1],[9],[6],[],[],[],[]]}"};
 
   Board result{s::deserialze(input)};
-  check(result, expected2, 2);
-  check(result, expected3, 3);
-  check(result, expected4, 4);
+  create_result(result, expected2, 2);
+  create_result(result, expected3, 3);
+  create_result(result, expected4, 4);
 }
 
 TEST(SerializerShould, beASymetricFunction) {
