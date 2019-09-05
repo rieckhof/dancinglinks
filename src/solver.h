@@ -25,6 +25,7 @@ public:
   datastruct::Board solve(datastruct::Board &b);
   bool sanity_check(std::vector<uint16_t> const &values_flat);
   void check_values(datastruct::Board &b);
+
   bool solve_algorithm_x(TheBoard&& board,TheSolution& solution);
   bool no_columns(TheBoard &b);
   TheBoard step6(std::vector<size_t> const& col_index_with_ones, TheBoard b);

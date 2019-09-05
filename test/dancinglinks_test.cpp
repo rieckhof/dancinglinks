@@ -8,18 +8,6 @@ struct TestingStuff{
     TestingStuff* right;
 };
 
-TEST(DancingLinks, ShouldInsertHeader){
-    DancingLinks dl;
-    std::shared_ptr<DancingLinks::ColumnObj> h1 {std::make_shared<DancingLinks::ColumnObj>()};
-    h1->name = 1;
-    std::shared_ptr<DancingLinks::ColumnObj> h2 {std::make_shared<DancingLinks::ColumnObj>()};
-    dl.insert(h1,h2,2);
-
-    ASSERT_EQ(h1->right, h2);
-    ASSERT_EQ(h2->left, h1);
-    ASSERT_EQ(h2->name,"C");
-}
-
 TEST(DancingLinks, ShouldCreateHeaderOf3Length){
     DancingLinks dl;
     const static size_t header_size (3);
@@ -53,14 +41,31 @@ TEST(DancingLinksShould, make_line_cerates_line){
     std::vector<uint16_t> row2 {1,0,1,0};
     dl.make_row(row1);
     dl.make_row(row2);
-    ASSERT_EQ(dl.get_header(1)->down->index,6);
-    ASSERT_EQ(dl.get_header(1)->down->down->index,9);
-    ASSERT_EQ(dl.get_header(4)->down->index,7);
-    ASSERT_EQ(dl.get_header(3)->down->index,10);
-    ASSERT_EQ(dl.get_header(5)->top_spacer,-0);
-    ASSERT_EQ(dl.get_header(5)->top,nullptr);
-    ASSERT_EQ(dl.get_header(5)->down->index, 7);
-    ASSERT_EQ(dl.get_header(8)->top_spacer,-1);
+    ASSERT_EQ(dl.get_object(1)->down->index,6);
+    ASSERT_EQ(dl.get_object(1)->down->down->index,9);
+    ASSERT_EQ(dl.get_object(4)->down->index,7);
+    ASSERT_EQ(dl.get_object(3)->down->index,10);
+
+    ASSERT_EQ(dl.get_object(5)->top_spacer,0);
+    ASSERT_EQ(dl.get_object(5)->down->index, 7);
+    ASSERT_EQ(dl.get_object(5)->up,nullptr);
+
+    ASSERT_EQ(dl.get_object(8)->top_spacer,-1);
+    ASSERT_EQ(dl.get_object(8)->down->index, 10);
+    ASSERT_EQ(dl.get_object(8)->up->index, 6);
+}
+
+TEST(DancingLinks, createMatrix){
+    DancingLinks dl;
+    std::map<size_t, std::vector<uint16_t>> b;
+    b.insert({0, {1, 1, 0, 0, 0}});
+    b.insert({1, {1, 1, 1, 0, 0}});
+    b.insert({3, {1, 1, 0, 1, 0}});
+    b.insert({4, {0, 0, 1, 0, 1}});
+    b.insert({5, {0, 0, 1, 1, 1}});
+    dl.create_matrix(b);
+    dl.print();
 
 }
+
 
