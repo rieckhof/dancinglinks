@@ -55,6 +55,24 @@ TEST(DancingLinksShould, make_line_cerates_line){
     ASSERT_EQ(dl.get_object(8)->up->index, 6);
 }
 
+std::vector<size_t> check(std::shared_ptr<DancingLinks::ColumnObj> iterator_down, std::shared_ptr<DancingLinks::ColumnObj>const& iterator){
+    std::vector<size_t> result;
+    while(iterator_down and iterator_down != iterator){
+       result.push_back(iterator_down->index);
+       iterator_down = iterator_down->down;
+    }
+    return result;
+}
+
+void check_all(std::shared_ptr<DancingLinks::ColumnObj>const& iterator, std::vector<size_t>const& expected_values)
+{
+    std::vector<size_t> result;
+    result.push_back(iterator->index);
+    auto temp = check(iterator->down, iterator);
+    result.insert(result.end(), temp.begin(), temp.end());
+    EXPECT_EQ(result,expected_values);
+}
+
 TEST(DancingLinks, createMatrix){
     DancingLinks dl;
     std::map<size_t, std::vector<uint16_t>> b;
@@ -64,8 +82,18 @@ TEST(DancingLinks, createMatrix){
     b.insert({4, {0, 0, 1, 0, 1}});
     b.insert({5, {0, 0, 1, 1, 1}});
     dl.create_matrix(b);
-    dl.print();
+//    dl.print();
 
+    std::vector<std::vector<size_t>> all_expected_values{{1,7,10,14},
+                {2,8,11,15}, {3,12,18,21},
+                {4,16,22}, {5,19,23}};
+
+    auto iterator = dl.root->right;
+    for(auto& expected : all_expected_values){
+        check_all(iterator, expected);
+        iterator = iterator->right;
+    }
+    EXPECT_EQ(iterator, dl.root);
 }
 
 
