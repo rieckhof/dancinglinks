@@ -187,10 +187,8 @@ public:
                 item_i = x->top;
                 x = x->down;
                 //End X6
-//                if(x == item_i){
-//                    uncover(item_i);
-//                }
             }
+            uncover(item_i);
         }
     }
 
