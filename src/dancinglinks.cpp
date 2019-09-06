@@ -24,7 +24,7 @@ void DancingLinks::make_header(size_t size){
     header_size = objs.size();
 }
 
-std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_object(uint32_t index){
+std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_object(size_t index){
     assert(index > 0);
     return objs.at(index - 1);
 }
