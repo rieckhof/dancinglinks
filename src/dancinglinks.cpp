@@ -1,6 +1,27 @@
 #include "dancinglinks.h"
+#include <algorithm>
 
 namespace sudoku::dancinglinks {
+
+std::shared_ptr<DancingLinks::ColumnObj>const& DancingLinks::get_root() {
+    return root;
+};
+
+std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_item_with_least_options(){
+    std::shared_ptr<ColumnObj> result;
+    std::for_each(objs.begin(), objs.begin() + get_header_size(),
+                  [&result](std::shared_ptr<ColumnObj>& header){
+                            if(!result or result->size > header->size){
+                                result = header;
+                            }
+                    });
+    return result;
+}
+
+int32_t DancingLinks::get_header_size() const{
+    return static_cast<int32_t>(header_size);
+}
+
 DancingLinks::DancingLinks() : letters (35){
     int begin (65);
     std::generate_n(letters.begin(), 35, [&begin](){
@@ -24,7 +45,7 @@ void DancingLinks::make_header(size_t size){
     header_size = objs.size();
 }
 
-std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_object(size_t index){
+std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_object(size_t index) const{
     assert(index > 0);
     return objs.at(index - 1);
 }
@@ -34,7 +55,7 @@ void DancingLinks::create_matrix(std::map<size_t, std::vector<uint16_t>>const& b
     for(auto& [index, data] : board){
         make_row(data);
     }
-    std::for_each(objs.begin(), objs.begin() + header_size,
+    std::for_each(objs.begin(), objs.begin() + get_header_size(),
                   [this](std::shared_ptr<ColumnObj>& header){
                         header->size = count_elements_start_header(header);
                         auto last = get_last(header);
@@ -80,7 +101,7 @@ std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_last_spacer(){
     return result == objs.rend() ? nullptr : *result;
 }
 
-void DancingLinks::print(){
+void DancingLinks::print() const{
     std::shared_ptr<ColumnObj> iterator = root->right;
     while(iterator != root){
         std::cout << "Header " << iterator->index << " " << iterator->size << std::endl;

@@ -12,20 +12,19 @@ TEST(DancingLinks, ShouldCreateHeaderOf3Length){
     DancingLinks dl;
     const static size_t header_size (3);
     dl.make_header(header_size);
-    ASSERT_TRUE(dl.root->name.empty());
-    ASSERT_EQ(dl.root->right->name, "A");
-    ASSERT_EQ(dl.root->right->right->name, "B");
-    ASSERT_EQ(dl.root->right->right->right->name, "C");
-    ASSERT_EQ(dl.root->right->right->right->right, dl.root);
-    ASSERT_EQ(dl.root->right->right->right->right->right->name, dl.root->right->name);
-    ASSERT_EQ(dl.root->right->right->right->right->right, dl.root->right);
-
-    ASSERT_EQ(dl.root->left->name, "C");
-    ASSERT_EQ(dl.root->left->left->name, "B");
-    ASSERT_EQ(dl.root->left->left->left->name, "A");
-    ASSERT_EQ(dl.root->left->left->left->left, dl.root);
-    ASSERT_EQ(dl.root->left->left->left->left->left->name, dl.root->left->name);
-    ASSERT_EQ(dl.root->left->left->left->left->left, dl.root->left);
+  ASSERT_TRUE(dl.get_root()->name.empty());
+    ASSERT_EQ(dl.get_root()->right->name, "A");
+    ASSERT_EQ(dl.get_root()->right->right->name, "B");
+    ASSERT_EQ(dl.get_root()->right->right->right->name, "C");
+    ASSERT_EQ(dl.get_root()->right->right->right->right, dl.get_root());
+    ASSERT_EQ(dl.get_root()->right->right->right->right->right->name, dl.get_root()->right->name);
+    ASSERT_EQ(dl.get_root()->right->right->right->right->right, dl.get_root()->right);
+    ASSERT_EQ(dl.get_root()->left->name, "C");
+    ASSERT_EQ(dl.get_root()->left->left->name, "B");
+    ASSERT_EQ(dl.get_root()->left->left->left->name, "A");
+    ASSERT_EQ(dl.get_root()->left->left->left->left, dl.get_root());
+    ASSERT_EQ(dl.get_root()->left->left->left->left->left->name, dl.get_root()->left->name);
+    ASSERT_EQ(dl.get_root()->left->left->left->left->left, dl.get_root()->left);
 }
 
 TEST(DancingLinksShould, get_last_spacer_return_null){
@@ -88,12 +87,12 @@ TEST(DancingLinks, createMatrix){
                 {2,8,11,15}, {3,12,18,21},
                 {4,16,22}, {5,19,23}};
 
-    auto iterator = dl.root->right;
+    auto iterator = dl.get_root()->right;
     for(auto& expected : all_expected_values){
         check_all(iterator, expected);
         iterator = iterator->right;
     }
-    EXPECT_EQ(iterator, dl.root);
+    EXPECT_EQ(iterator, dl.get_root());
 }
 
 
