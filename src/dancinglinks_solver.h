@@ -16,7 +16,7 @@ class DancingLinksSolver
     DancingLinks dl;
 
 public:
-    DancingLinksSolver(std::map<size_t, std::vector<uint16_t>>const& board) {
+    DancingLinksSolver(std::map<size_t, std::vector<uint16_t>>const& board){
         dl.create_matrix(board);
     }
 

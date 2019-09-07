@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(sudoku_solver)
 option(COVERAGE "Enable coverage" OFF)
-
 find_package(Threads REQUIRED)
 
 if(COVERAGE)
