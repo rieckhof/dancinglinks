@@ -22,7 +22,7 @@ int32_t DancingLinks::get_header_size() const{
     return static_cast<int32_t>(header_size);
 }
 
-DancingLinks::DancingLinks(){
+DancingLinks::DancingLinks() : letters(number_of_leters){
     int begin (ascii_code_for_A);
     std::generate_n(letters.begin(), number_of_leters, [&begin](){
         return static_cast<char>(begin++);

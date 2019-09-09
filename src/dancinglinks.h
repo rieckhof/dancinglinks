@@ -52,7 +52,7 @@ private:
     constexpr static int number_of_leters{35};
     constexpr static int ascii_code_for_A{65};
     std::shared_ptr<ColumnObj> root {std::make_shared<ColumnObj>()};
-    std::vector<char> letters{number_of_leters};
+    std::vector<char> letters;
     size_t header_size{0}; // no root
     int spacer_counter{0};
     std::vector<std::shared_ptr<ColumnObj>> objs; //begin() ColumnObj->index = 1
