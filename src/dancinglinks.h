@@ -28,7 +28,7 @@ public:
         std::shared_ptr<ColumnObj> top;
     };
 
-    std::shared_ptr<ColumnObj>const& get_root();
+    std::shared_ptr<ColumnObj>const& get_root() const;
 
     std::shared_ptr<ColumnObj> get_item_with_least_options();
 

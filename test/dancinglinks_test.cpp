@@ -1,5 +1,6 @@
 #include "dancinglinks.h"
 #include <gtest/gtest.h>
+#include "utils.h"
 
 using namespace sudoku::dancinglinks;
 
@@ -12,7 +13,7 @@ TEST(DancingLinks, ShouldCreateHeaderOf3Length){
     DancingLinks dl;
     const static size_t header_size (3);
     dl.make_header(header_size);
-  ASSERT_TRUE(dl.get_root()->name.empty());
+    ASSERT_TRUE(dl.get_root()->name.empty());
     ASSERT_EQ(dl.get_root()->right->name, "A");
     ASSERT_EQ(dl.get_root()->right->right->name, "B");
     ASSERT_EQ(dl.get_root()->right->right->right->name, "C");
@@ -54,23 +55,6 @@ TEST(DancingLinksShould, make_line_cerates_line){
     ASSERT_EQ(dl.get_object(8)->up->index, 6);
 }
 
-std::vector<size_t> create_test_results(std::shared_ptr<DancingLinks::ColumnObj> iterator_down, std::shared_ptr<DancingLinks::ColumnObj>const& iterator){
-    std::vector<size_t> result;
-    while(iterator_down and iterator_down != iterator){
-       result.push_back(iterator_down->index);
-       iterator_down = iterator_down->down;
-    }
-    return result;
-}
-
-void check_all(std::shared_ptr<DancingLinks::ColumnObj>const& iterator, std::vector<size_t>const& expected_values)
-{
-    std::vector<size_t> result;
-    result.push_back(iterator->index);
-    auto temp = create_test_results(iterator->down, iterator);
-    result.insert(result.end(), temp.begin(), temp.end());
-    EXPECT_EQ(result,expected_values);
-}
 
 TEST(DancingLinks, createMatrix){
     DancingLinks dl;
@@ -81,18 +65,44 @@ TEST(DancingLinks, createMatrix){
     b.insert({4, {0, 0, 1, 0, 1}});
     b.insert({5, {0, 0, 1, 1, 1}});
     dl.create_matrix(b);
-//    dl.print();
-
     std::vector<std::vector<size_t>> all_expected_values{{1,7,10,14},
                 {2,8,11,15}, {3,12,18,21},
                 {4,16,22}, {5,19,23}};
-
-    auto iterator = dl.get_root()->right;
-    for(auto& expected : all_expected_values){
-        check_all(iterator, expected);
-        iterator = iterator->right;
-    }
-    EXPECT_EQ(iterator, dl.get_root());
+    check_all_directions(dl, all_expected_values);
 }
 
+TEST(DancingLinks, SpacerTest){
+    DancingLinks dl;
+    std::map<size_t, std::vector<uint16_t>> b;
+    b.insert({0, {1, 1, 0, 0, 0}});
+    b.insert({1, {1, 1, 1, 0, 0}});
+    b.insert({3, {1, 1, 0, 1, 0}});
+    b.insert({4, {0, 0, 1, 0, 1}});
+    b.insert({5, {0, 0, 1, 1, 1}});
+    dl.create_matrix(b);
+//    dl.print();
 
+    auto last_spacer = dl.get_last_spacer();
+    auto first_spacer = dl.get_object(6);
+    auto second_spacer = dl.get_object(9);
+    auto second_last_spacer = dl.get_object(20);
+
+    ASSERT_EQ(first_spacer->index, 6);
+    ASSERT_EQ(first_spacer->top_spacer, 0);
+    ASSERT_EQ(first_spacer->down->index, 8);
+    ASSERT_EQ(first_spacer->top, nullptr);
+
+    ASSERT_EQ(second_spacer->index, 9);
+    ASSERT_EQ(second_spacer->top_spacer, -1);
+    ASSERT_EQ(second_spacer->up->index, 7);
+    ASSERT_EQ(second_spacer->down->index, 12);
+
+    ASSERT_EQ(second_last_spacer->index, 20);
+    ASSERT_EQ(second_last_spacer->top_spacer, -4);
+    ASSERT_EQ(second_last_spacer->up->index, 18);
+    ASSERT_EQ(second_last_spacer->down->index, 23);
+
+    ASSERT_EQ(last_spacer->index, 24);
+    ASSERT_EQ(last_spacer->top_spacer, -5);
+    ASSERT_EQ(last_spacer->up->index, 21);
+}

@@ -3,7 +3,7 @@
 
 namespace sudoku::dancinglinks {
 
-std::shared_ptr<DancingLinks::ColumnObj>const& DancingLinks::get_root() {
+std::shared_ptr<DancingLinks::ColumnObj>const& DancingLinks::get_root() const{
     return root;
 };
 
@@ -62,6 +62,11 @@ void DancingLinks::create_matrix(std::map<size_t, std::vector<uint16_t>>const& b
                         header->up = last;
                         last->down = header;
                   });
+    auto last_spacer = std::make_shared<ColumnObj>();
+    last_spacer->up = get_object(get_last_spacer()->index +1);
+    last_spacer->top_spacer = spacer_counter--;
+    last_spacer->index = objs.back()->index +1;
+    objs.push_back(last_spacer);
 }
 
 

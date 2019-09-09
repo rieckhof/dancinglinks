@@ -13,9 +13,9 @@ class DancingLinksSolver
     using ColumnObj = DancingLinks::ColumnObj;
     std::unordered_set<std::shared_ptr<ColumnObj>> backtracking_helper;
     std::vector<std::shared_ptr<ColumnObj>> solution;
-    DancingLinks dl;
 
 public:
+    DancingLinks dl;
     DancingLinksSolver(std::map<size_t, std::vector<uint16_t>>const& board){
         dl.create_matrix(board);
     }
@@ -23,21 +23,21 @@ public:
     void hide(std::shared_ptr<ColumnObj>& p){
         auto q = dl.get_object(p->index + 1);
         while(p != q){
-            auto& x = q->top;
-            auto& u = q->up;
-            auto& d = q->down;
+            auto x = q->top;
+            auto u = q->up;
+            auto d = q->down;
             if(x == nullptr){
                 q = u;
             }else{
-                d = u->down;
-                u = d->up;
+                u->down = d;
+                d->up = u;
                 --x->size;
                 q = dl.get_object(q->index +1);
             }
         }
     }
 
-    void cover(std::shared_ptr<ColumnObj>& header){
+    void cover(std::shared_ptr<ColumnObj>const& header){
         auto p = header->down;
         while(p != header){
             hide(p);
@@ -45,21 +45,21 @@ public:
         }
         auto& l = header->left;
         auto& r = header->right;
-        r = l->right;
-        l = r->left;
+        l->right = r;
+        r->left = l;
     }
 
     void unhide(std::shared_ptr<ColumnObj>& p){
         auto q = dl.get_object(p->index -1);
         while(q  != p){
-            auto& x = q->top;
-            auto& u = q->up;
-            auto& d = q->down;
+            auto x = q->top;
+            auto u = q->up;
+            auto d = q->down;
             if(x == nullptr){
                 q = d;
             }else{
-                q = u->down;
-                q = d->up;
+                u->down = q;
+                d->up = q;
                 ++x->size;
                 q = dl.get_object(q->index -1);
             }
@@ -69,8 +69,8 @@ public:
     void uncover(std::shared_ptr<ColumnObj>& header){
         auto& l = header->left;
         auto& r = header->right;
-        header = l->right;
-        header = r->left;
+        l->right = header;
+        r->left = header;
         auto p = header->up;
         while(p != header){
             unhide(p);
