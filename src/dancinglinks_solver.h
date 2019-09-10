@@ -108,7 +108,7 @@ public:
             create_solution(backtracking_helper);
             if(level == 0){
                 return;
-            }else {
+            }else{
                 --level;
                 return;
             }
