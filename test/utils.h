@@ -6,11 +6,11 @@
 
 namespace sudoku::dancinglinks {
 
-void get_down(std::shared_ptr<DancingLinks::ColumnObj>& it){
+void iterate_down(std::shared_ptr<DancingLinks::ColumnObj>& it){
     it = it->down;
 }
 
-void get_up(std::shared_ptr<DancingLinks::ColumnObj>& it){
+void iterate_up(std::shared_ptr<DancingLinks::ColumnObj>& it){
     it = it->up;
 }
 
@@ -29,7 +29,7 @@ void check_all(std::shared_ptr<DancingLinks::ColumnObj>const& iterator, std::vec
 {
     std::vector<size_t> result;
     result.push_back(iterator->index);
-    auto temp = create_test_results(iterator->down, iterator, get_down);
+    auto temp = create_test_results(iterator->down, iterator, iterate_down);
     result.insert(result.end(), temp.begin(), temp.end());
     EXPECT_EQ(result,expected_values);
 }
@@ -38,7 +38,7 @@ void check_all_up(std::shared_ptr<DancingLinks::ColumnObj>const& iterator, std::
 {
     std::vector<size_t> result;
     result.push_back(iterator->index);
-    auto temp = create_test_results(iterator->up, iterator, get_up);
+    auto temp = create_test_results(iterator->up, iterator, iterate_up);
     result.insert(result.end(), temp.begin(), temp.end());
     EXPECT_EQ(result,expected_values);
 }

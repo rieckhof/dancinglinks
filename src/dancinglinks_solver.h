@@ -12,8 +12,8 @@ class DancingLinksSolver
 {
     using ColumnObj = DancingLinks::ColumnObj;
     std::unordered_set<std::shared_ptr<ColumnObj>> backtracking_helper;
-    std::vector<std::shared_ptr<ColumnObj>> solution;
-
+    using solution_t = std::vector<std::shared_ptr<ColumnObj>>;
+    std::vector<solution_t> solutions;
 public:
     DancingLinks dl;
     DancingLinksSolver(std::map<size_t, std::vector<uint16_t>>const& board){
@@ -78,20 +78,29 @@ public:
         }
     }
 
-    void create_solution(std::unordered_set<std::shared_ptr<ColumnObj>>& bk_helper){
-        for(auto& x : bk_helper){
-            solution.push_back(x->top);
-            auto next = dl.get_object(x->index +1);
-            while(x != next){
-                auto sol = next->top;
-                if(sol == nullptr){
-                    next = next->up;
-                }else{
-                    solution.push_back(sol);
-                    next = dl.get_object(x->index +1);
-                }
-            }
-        }
+    void create_solution(std::unordered_set<std::shared_ptr<ColumnObj>>const& bk_helper){
+        solution_t result;
+        result.reserve(bk_helper.size());
+        std::transform(bk_helper.begin(), bk_helper.end(), std::back_inserter(result),
+                       [&dl = dl](std::shared_ptr<ColumnObj>const& x){
+                            return dl.get_start_spacer_from(x);
+                        });
+        solutions.push_back(result);
+    }
+
+    std::vector<std::vector<size_t>> get_index_board() const{
+        std::vector<std::vector<size_t>> result;
+        result.reserve(solutions.size());
+        std::transform(solutions.begin(), solutions.end(), std::back_inserter(result),
+                       [](solution_t const& sol){
+                        std::vector<size_t> temp;
+                        temp.reserve(sol.size());
+                        for(auto& obj : sol){
+                            temp.push_back(obj->top_spacer * -1);
+                        }
+                        return temp;
+        });
+        return result;
     }
 
     void solve_algo_X(int& level){
@@ -112,11 +121,11 @@ public:
             backtracking_helper.insert(x);
             auto p = dl.get_object(x->index + 1);
             while(p != x){
-                auto j = p->top;
-                if(j == nullptr){
+                auto header = p->top;
+                if(header == nullptr){
                     p = p->up;
                 }else{
-                    cover(j);
+                    cover(header);
                     p = dl.get_object(p->index +1);
                 }
             }
@@ -136,7 +145,7 @@ public:
             }
             item_i = x->top;
             x = x->down;
-            //End X6
+//          End X6
         }
         uncover(item_i);
     }

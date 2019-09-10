@@ -9,12 +9,13 @@ std::shared_ptr<DancingLinks::ColumnObj>const& DancingLinks::get_root() const{
 
 std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_item_with_least_options(){
     std::shared_ptr<ColumnObj> result;
-    std::for_each(objs.begin(), objs.begin() + get_header_size(),
-                  [&result](std::shared_ptr<ColumnObj>& header){
-                            if(!result or result->size > header->size){
-                                result = header;
-                            }
-                    });
+    auto last = root->right;
+    while(last != root){
+        if (!result or result ->size > last->size){
+            result = last;
+        }
+        last = last->right;
+    }
     return result;
 }
 
@@ -104,6 +105,14 @@ std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_last_spacer(){
                             return obj->top_spacer <= 0;
                         });
     return result == objs.rend() ? nullptr : *result;
+}
+
+std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_start_spacer_from(std::shared_ptr<ColumnObj>const& obj) const{
+    auto it = get_object(obj->index);
+    while(it->top){
+        it = get_object(it->index +1);
+    }
+    return get_object(it->up->index -1);
 }
 
 void DancingLinks::print() const{

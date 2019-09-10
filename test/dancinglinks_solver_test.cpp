@@ -1,18 +1,23 @@
 #include <gtest/gtest.h>
 #include "dancinglinks_solver.h"
 #include "utils.h"
+#include <numeric>
 
 using namespace sudoku::dancinglinks;
 
+using TheBoard = std::map<size_t, std::vector<uint16_t>>;
 struct CoverTests : ::testing::Test {
-    std::map<size_t, std::vector<uint16_t>> b;
+    TheBoard b;
+    std::vector<uint16_t> solution {{1, 1, 0, 1, 0}};
+    std::vector<uint16_t> solution1{{0, 0, 1, 0, 1}};
+
 
     void SetUp() override{
         b.insert({0, {1, 1, 0, 0, 0}});
         b.insert({1, {1, 1, 1, 0, 0}});
-        b.insert({3, {1, 1, 0, 1, 0}});
-        b.insert({4, {0, 0, 1, 0, 1}});
-        b.insert({5, {0, 0, 1, 1, 1}});
+        b.insert({2, solution});
+        b.insert({3, solution1});
+        b.insert({4, {0, 0, 1, 1, 1}});
     }
     std::vector<std::vector<size_t>> all_expected_values{{1,7,10,14},
                 {2,8,11,15}, {3,12,18,21},
@@ -112,9 +117,13 @@ TEST_F(CoverTests, CoverHeader4){
     auto& header5 = dls.dl.get_root()->right->right->right->right;
 
     ASSERT_EQ(header1->index, 1);
+    ASSERT_EQ(header1->size, 2);
     ASSERT_EQ(header2->index, 2);
+    ASSERT_EQ(header2->size, 2);
     ASSERT_EQ(header3->index, 3);
+    ASSERT_EQ(header3->size, 2);
     ASSERT_EQ(header5->index, 5);
+    ASSERT_EQ(header5->size, 1);
 
     ASSERT_EQ(header1->down->index, 7);
     ASSERT_EQ(header1->down->down->index, 10);
@@ -140,5 +149,50 @@ TEST_F(CoverTests, CoverUncoverHeader4){
     dls.uncover(header4);
 
     check_all_directions(dls.dl,all_expected_values);
+}
+
+
+void evaluate_solution(std::vector<std::vector<size_t>>const& results, std::map<size_t, std::vector<uint16_t>>& b)
+{
+    for(auto& result : results){
+        std::vector<uint16_t> check;
+        std::vector<uint16_t> temp2 ;
+        for(size_t const& index : result){
+            temp2 = b.at(index);
+            check.insert(check.begin(), temp2.begin(), temp2.end());
+            std::cout << index << ": ";
+            std::for_each(temp2.begin(), temp2.end(), [](auto i){std::cout << i << " ";});
+            std::cout << "\n";
+        }
+        std::cout << "\n";
+        int total = std::accumulate(check.begin(),check.end(), 0, std::plus<uint16_t>());
+        EXPECT_EQ(total, temp2.size());
+    }
+}
+
+TEST_F(CoverTests, SolveSimpleProblem){
+    DancingLinksSolver dls(b);
+    int level{0};
+    dls.solve_algo_X(level);
+    std::vector<std::vector<size_t>>  results = dls.get_index_board();
+    evaluate_solution(results,b);
+}
+
+TEST(CoverTests2, SolveSimpleProblem2){
+    TheBoard b;
+    b.insert({0, {1 , 0 , 0 ,0, 1, 0, 0, 0, 1, 0, 0, 0}});
+    b.insert({1, {1 , 0 , 0 ,0, 0, 1, 0, 0, 0, 1, 0, 0}});
+    b.insert({2, {0 , 1 , 0 ,0, 1, 0, 0, 0, 0, 0, 1, 0}});
+    b.insert({3, {0 , 1 , 0 ,0, 0, 1, 0, 0, 0, 0, 0, 1}});
+    b.insert({4, {0 , 0 , 1 ,0, 0, 0, 1, 0, 1, 0, 0, 0}});
+    b.insert({5, {0 , 0 , 1 ,0, 0, 0, 0, 1, 0, 1, 0, 0}});
+    b.insert({6, {0 , 0 , 0 ,1, 0, 0, 1, 0, 0, 0, 1, 0}});
+    b.insert({7, {0 , 0 , 0 ,1, 0, 0, 0, 1, 0, 0, 0, 1}});
+
+    DancingLinksSolver dls(b);
+    int level{0};
+    dls.solve_algo_X(level);
+    std::vector<std::vector<size_t>>  results = dls.get_index_board();
+    evaluate_solution(results, b);
 }
 

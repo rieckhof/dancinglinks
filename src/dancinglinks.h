@@ -46,6 +46,8 @@ public:
 
     std::shared_ptr<ColumnObj> get_last_spacer();
 
+    std::shared_ptr<ColumnObj> get_start_spacer_from(std::shared_ptr<ColumnObj>const& obj) const;
+
     void print() const;
 
 private:
