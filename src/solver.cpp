@@ -8,7 +8,7 @@ namespace solver {
 
 using field_value = datastruct::Board::matrix_value_depth;
 
-int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size){
+int TheBoardComplex::get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size){
     const size_t break_loop = board_size * board_size * board_size;
     assert(row_index < break_loop);
 
@@ -44,9 +44,10 @@ int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_fr
     return -1;
 }
 
-TheBoard create_initial_board(const size_t board_size){
+TheBoard TheBoardComplex::create_initial_board(const size_t board_size){
     TheBoard b;
     size_t constraints (3);
+    std::unordered_map<std::string,int> map;
     const ulong sqrt_from_size{static_cast<ulong>(
                     std::lround( std::sqrt( board_size )))};
     if( sqrt_from_size * sqrt_from_size == board_size ){
@@ -96,18 +97,18 @@ TheBoard create_initial_board(const size_t board_size){
              current_col += board_size;
              col_vs_row = 0;
         }
-
+        std::
         b.insert({row_index, std::move(row)});
     }
     return b;
 }
 
-size_t adjust_row_column_constraint(size_t const col, size_t const line, uint16_t const value, size_t const board_size){
+size_t TheBoardComplex::adjust_row_column_constraint(size_t const col, size_t const line, uint16_t const value, size_t const board_size){
 
 }
 
 
-bool remove_value(TheBoard& b, size_t const col, size_t const line,
+bool TheBoardComplex::remove_value(TheBoard& b, size_t const col, size_t const line,
                   uint16_t const value, size_t const board_size)
 {
     size_t l_col(0);

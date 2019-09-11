@@ -164,8 +164,8 @@ using namespace sudoku::solver;
 TEST(CreateBoard, create_initial_board2){
     size_t board_size(2);
     size_t should_lines(board_size * board_size *board_size);
-
-    TheBoard b = sudoku::solver::create_initial_board(board_size);
+    TheBoardComplex c;
+    TheBoard b = c.create_initial_board(board_size);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;
@@ -183,8 +183,8 @@ TEST(CreateBoard, create_initial_board2){
 TEST(CreateBoard, create_initial_board3){
     size_t board_size(3);
     size_t should_lines(board_size * board_size *board_size);
-
-    TheBoard b = sudoku::solver::create_initial_board(board_size);
+    TheBoardComplex c;
+    TheBoard b = c.create_initial_board(board_size);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;
@@ -220,68 +220,70 @@ TEST(CreateBoard, create_initial_board3){
 }
 
 TEST(get_box_index_first_3_should, return_values_for_4){
-    auto result = sudoku::solver::get_box_index(0,4,2);
+    TheBoardComplex c;
+    auto result = c.get_box_index(0,4,2);
     EXPECT_EQ(0,result);
 
-    result = sudoku::solver::get_box_index(2,4,2);
+    result = c.get_box_index(2,4,2);
     EXPECT_EQ(0,result);
 
-    result = sudoku::solver::get_box_index(32,4,2);
+    result = c.get_box_index(32,4,2);
     EXPECT_EQ(2,result);
 
-    result = sudoku::solver::get_box_index(31,4,2);
+    result = c.get_box_index(31,4,2);
     EXPECT_EQ(1,result);
 
-    result = sudoku::solver::get_box_index(63,4,2);
+    result = c.get_box_index(63,4,2);
     EXPECT_EQ(3,result);
 }
 
 TEST(get_box_index_first_3_should, return_values_for_9){
-    auto result = sudoku::solver::get_box_index(0,9,3);
+    TheBoardComplex c;
+    auto result = c.get_box_index(0,9,3);
     EXPECT_EQ(0,result);
 
-    result = sudoku::solver::get_box_index(26,9,3);
+    result = c.get_box_index(26,9,3);
     EXPECT_EQ(0,result);
 
-    result = sudoku::solver::get_box_index(27,9,3);
+    result = c.get_box_index(27,9,3);
     EXPECT_EQ(1,result);
 
-    result = sudoku::solver::get_box_index(53,9,3);
+    result = c.get_box_index(53,9,3);
     EXPECT_EQ(1,result);
 
-    result = sudoku::solver::get_box_index(54,9,3);
+    result = c.get_box_index(54,9,3);
     EXPECT_EQ(2,result);
 
-    result = sudoku::solver::get_box_index(80,9,3);
+    result = c.get_box_index(80,9,3);
     EXPECT_EQ(2,result);
 
-    result = sudoku::solver::get_box_index(81,9,3);
+    result = c.get_box_index(81,9,3);
     EXPECT_EQ(0,result);
 
-    result = sudoku::solver::get_box_index(107,9,3);
+    result = c.get_box_index(107,9,3);
     EXPECT_EQ(0,result);
 
-    result = sudoku::solver::get_box_index(108,9,3);
+    result = c.get_box_index(108,9,3);
     EXPECT_EQ(1,result);
 
-    result = sudoku::solver::get_box_index(134,9,3);
+    result = c.get_box_index(134,9,3);
     EXPECT_EQ(1,result);
 
-    result = sudoku::solver::get_box_index(135,9,3);
+    result = c.get_box_index(135,9,3);
     EXPECT_EQ(2,result);
 
-    result = sudoku::solver::get_box_index(161,9,3);
+    result = c.get_box_index(161,9,3);
     EXPECT_EQ(2,result);
 
-    result = sudoku::solver::get_box_index(162,9,3);
+    result = c.get_box_index(162,9,3);
     EXPECT_EQ(0,result);
 
-    result = sudoku::solver::get_box_index(242,9,3);
+    result = c.get_box_index(242,9,3);
     EXPECT_EQ(2,result);
 
-    result = sudoku::solver::get_box_index(243,9,3);
+    result = c.get_box_index(243,9,3);
     EXPECT_EQ(3,result);
 
-    result = sudoku::solver::get_box_index(728,9,3);
+    result = c.get_box_index(728,9,3);
     EXPECT_EQ(8,result);
 }
