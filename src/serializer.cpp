@@ -9,6 +9,7 @@
 #include <sstream>
 #include <algorithm>
 #include <string>
+#include <unordered_map>
 
 namespace sudoku {
 namespace serializer {
@@ -19,11 +20,12 @@ namespace serializer {
 *3 1 0
 */
 
-void deserialize(std::filesystem::path p, TheBoard& b){
+void deserialize(std::filesystem::path p, TheBoard& b,std::unordered_map<std::string, u_int16_t>& map){
     assert(std::filesystem::exists(p));
 
     std::ifstream infile(p.c_str());
     std::string line;
+
 
     static constexpr uint16_t ASCCI_ZERO(48);
     while(std::getline(infile, line)){
@@ -40,7 +42,16 @@ void deserialize(std::filesystem::path p, TheBoard& b){
         });
         b.push_back(data);
     }
-
+    size_t col_index(0);
+    for(auto& line: b){
+        size_t line_index(0);
+        for(auto value: line){
+            std::string temp{std::to_string(col_index) + std::to_string(line_index)};
+            map.insert({temp,value});
+            line_index++;
+        }
+        col_index++;
+    }
 }
 
 

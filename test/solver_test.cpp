@@ -165,7 +165,12 @@ TEST(CreateBoard, create_initial_board2){
     size_t board_size(2);
     size_t should_lines(board_size * board_size *board_size);
     TheBoardComplex c;
-    TheBoard b = c.create_initial_board(board_size);
+    std::unordered_map<std::string, u_int16_t> map;
+    map.insert({"00",0});
+    map.insert({"01",0});
+    map.insert({"10",0});
+    map.insert({"11",0});
+    TheBoard b = c.create_initial_board(board_size,map);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;
@@ -184,7 +189,17 @@ TEST(CreateBoard, create_initial_board3){
     size_t board_size(3);
     size_t should_lines(board_size * board_size *board_size);
     TheBoardComplex c;
-    TheBoard b = c.create_initial_board(board_size);
+    std::unordered_map<std::string, u_int16_t> map;
+    map.insert({"00",0});
+    map.insert({"01",0});
+    map.insert({"02",0});
+    map.insert({"10",0});
+    map.insert({"11",0});
+    map.insert({"12",0});
+    map.insert({"20",0});
+    map.insert({"21",0});
+    map.insert({"22",0});
+    TheBoard b = c.create_initial_board(board_size,map);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;

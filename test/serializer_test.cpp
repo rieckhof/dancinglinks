@@ -21,15 +21,21 @@ std::vector<matrix_value_depth> fill_values(std::vector<uint16_t> &&input) {
 TEST(DeserializeFile, SimpleTextFile){
     std::filesystem::path p = std::filesystem::current_path().append("sudoku");
     sudoku::serializer::TheBoard b;
-    s::deserialize(p,b);
+    std::unordered_map<std::string, u_int16_t> map;
+    s::deserialize(p,b,map);
     ASSERT_EQ(b.size(),3);
-    const std::vector<uint16_t> expected {0,2,3};
+    const std::vector<uint16_t> expected  {0,2,3};
     const std::vector<uint16_t> expected1 {1,0,0};
     const std::vector<uint16_t> expected2 {2,0,0};
 
      ASSERT_EQ(expected, b.at(0));
      ASSERT_EQ(expected1, b.at(1));
      ASSERT_EQ(expected2, b.at(2));
+     ASSERT_EQ(map.at("01"),2);
+     ASSERT_EQ(map.at("02"),3);
+     ASSERT_EQ(map.at("10"),1);
+     ASSERT_EQ(map.at("20"),2);
+     ASSERT_EQ(map.at("22"),0);
 }
 
 

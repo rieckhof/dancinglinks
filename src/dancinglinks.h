@@ -72,7 +72,8 @@ private:
 class Transfomer{
     void transform(sudoku::serializer::TheBoard& input, dancinglinks::DancingLinks& output){
         solver::TheBoardComplex c;
-        solver::TheBoard initial_board = c.create_initial_board(input.size());
+        std::unordered_map<std::string, u_int16_t> map;
+        solver::TheBoard initial_board = c.create_initial_board(input.size(),map);
         size_t col(0);
         for(auto& vec : input){
             size_t line(0);

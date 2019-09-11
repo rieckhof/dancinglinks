@@ -17,12 +17,8 @@ std::vector<size_t> get_indexes_of_ones_for_col(size_t const& determ_select_col,
 
 class TheBoardComplex{
 public:
-    TheBoard create_initial_board(size_t board_size);
-    int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size);
-
-    bool remove_value(TheBoard& b, size_t const col, size_t const line,
-                      uint16_t const value, size_t const board_size);
-    size_t adjust_row_column_constraint(size_t const col, size_t const line, uint16_t const value, size_t const board_size);
+    TheBoard create_initial_board(size_t board_size, std::unordered_map<std::string, u_int16_t>& map);
+    int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size);   
 };
 
 
