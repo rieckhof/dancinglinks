@@ -102,6 +102,23 @@ TheBoard create_initial_board(const size_t board_size){
     return b;
 }
 
+size_t adjust_row_column_constraint(size_t const col, size_t const line, uint16_t const value, size_t const board_size){
+
+}
+
+
+bool remove_value(TheBoard& b, size_t const col, size_t const line,
+                  uint16_t const value, size_t const board_size)
+{
+    size_t l_col(0);
+    size_t l_line(0);
+    size_t l_valu(0);
+    for(auto& line :b){
+
+
+    }
+}
+
 datastruct::Board SudokuSolver::solve(datastruct::Board &b) {
   for (auto index : utils::range) {
     std::vector<datastruct::Board::matrix_value_depth> col_values;

@@ -8,6 +8,7 @@
 
 namespace sudoku::dancinglinks {
 
+
 class DancingLinksSolver
 {
     using ColumnObj = DancingLinks::ColumnObj;

@@ -1,8 +1,8 @@
-//#include "board.h"
-//#include "serializer.h"
-//#include "solver.h"
-//#include "utils.h"
-//#include <gtest/gtest.h>
+#include "board.h"
+#include "serializer.h"
+#include "solver.h"
+#include "utils.h"
+#include <gtest/gtest.h>
 
 //TEST(Utils, GetRangeFrom0to2) {
 //  std::vector<int> result = sudoku::utils::get_range(0, 2);
@@ -32,8 +32,8 @@
 //  EXPECT_TRUE(col_check);
 //}
 
-//using Solver =sudoku::solver::SudokuSolver;
-//using namespace sudoku::solver;
+using Solver =sudoku::solver::SudokuSolver;
+using namespace sudoku::solver;
 //struct SolverShould1 : ::testing::Test{
 //    //    0 = {1, 4, 7};
 //    //    1 = {1, 4};
@@ -161,127 +161,127 @@
 //    ASSERT_EQ(expected,result);
 //}
 
-//TEST(CreateBoard, create_initial_board2){
-//    size_t board_size(2);
-//    size_t should_lines(board_size * board_size *board_size);
+TEST(CreateBoard, create_initial_board2){
+    size_t board_size(2);
+    size_t should_lines(board_size * board_size *board_size);
 
-//    TheBoard b = sudoku::solver::create_initial_board(board_size);
-//    ASSERT_EQ(should_lines,b.size());
+    TheBoard b = sudoku::solver::create_initial_board(board_size);
+    ASSERT_EQ(should_lines,b.size());
 
-//    TheBoard expected_board;
-//    expected_board.insert({0, {1 , 0 , 0 ,0, 1, 0,0, 0, 1, 0, 0, 0}});
-//    expected_board.insert({1, {1 , 0 , 0 ,0, 0, 1,0, 0, 0, 1, 0, 0}});
-//    expected_board.insert({2, {0 , 1 , 0 ,0, 1, 0,0, 0, 0, 0, 1, 0}});
-//    expected_board.insert({3, {0 , 1 , 0 ,0, 0, 1,0, 0, 0, 0, 0, 1}});
-//    expected_board.insert({4, {0 , 0 , 1 ,0, 0, 0,1, 0, 1, 0, 0, 0}});
-//    expected_board.insert({5, {0 , 0 , 1 ,0, 0, 0,0, 1, 0, 1, 0, 0}});
-//    expected_board.insert({6, {0 , 0 , 0 ,1, 0, 0,1, 0, 0, 0, 1, 0}});
-//    expected_board.insert({7, {0 , 0 , 0 ,1, 0, 0,0, 1, 0, 0, 0, 1}});
+    TheBoard expected_board;
+    expected_board.insert({0, {1 , 0 , 0 ,0, 1, 0,0, 0, 1, 0, 0, 0}});
+    expected_board.insert({1, {1 , 0 , 0 ,0, 0, 1,0, 0, 0, 1, 0, 0}});
+    expected_board.insert({2, {0 , 1 , 0 ,0, 1, 0,0, 0, 0, 0, 1, 0}});
+    expected_board.insert({3, {0 , 1 , 0 ,0, 0, 1,0, 0, 0, 0, 0, 1}});
+    expected_board.insert({4, {0 , 0 , 1 ,0, 0, 0,1, 0, 1, 0, 0, 0}});
+    expected_board.insert({5, {0 , 0 , 1 ,0, 0, 0,0, 1, 0, 1, 0, 0}});
+    expected_board.insert({6, {0 , 0 , 0 ,1, 0, 0,1, 0, 0, 0, 1, 0}});
+    expected_board.insert({7, {0 , 0 , 0 ,1, 0, 0,0, 1, 0, 0, 0, 1}});
 
-//    ASSERT_EQ(expected_board, b);
-//}
-//TEST(CreateBoard, create_initial_board3){
-//    size_t board_size(3);
-//    size_t should_lines(board_size * board_size *board_size);
+    ASSERT_EQ(expected_board, b);
+}
+TEST(CreateBoard, create_initial_board3){
+    size_t board_size(3);
+    size_t should_lines(board_size * board_size *board_size);
 
-//    TheBoard b = sudoku::solver::create_initial_board(board_size);
-//    ASSERT_EQ(should_lines,b.size());
+    TheBoard b = sudoku::solver::create_initial_board(board_size);
+    ASSERT_EQ(should_lines,b.size());
 
-//    TheBoard expected_board;
-//    expected_board.insert({0, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({1, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({2, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({3, { 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({4, { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }});
-//    expected_board.insert({5, { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }});
-//    expected_board.insert({6, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 }});
-//    expected_board.insert({7, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }});
-//    expected_board.insert({8, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }});
-//    expected_board.insert({9, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({10, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({11, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({12, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({13, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }});
-//    expected_board.insert({14, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }});
-//    expected_board.insert({15, { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 }});
-//    expected_board.insert({16, { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }});
-//    expected_board.insert({17, { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }});
-//    expected_board.insert({18, { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({19, { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({20, { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({21, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 }});
-//    expected_board.insert({22, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }});
-//    expected_board.insert({23, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0 }});
-//    expected_board.insert({24, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 }});
-//    expected_board.insert({25, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }});
-//    expected_board.insert({26, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }});
+    TheBoard expected_board;
+    expected_board.insert({0, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({1, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({2, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({3, { 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 }});
+    expected_board.insert({4, { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }});
+    expected_board.insert({5, { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }});
+    expected_board.insert({6, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 }});
+    expected_board.insert({7, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }});
+    expected_board.insert({8, { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }});
+    expected_board.insert({9, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({10, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({11, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({12, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 }});
+    expected_board.insert({13, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }});
+    expected_board.insert({14, { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }});
+    expected_board.insert({15, { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 }});
+    expected_board.insert({16, { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }});
+    expected_board.insert({17, { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }});
+    expected_board.insert({18, { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({19, { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({20, { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 }});
+    expected_board.insert({21, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 }});
+    expected_board.insert({22, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }});
+    expected_board.insert({23, { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0 }});
+    expected_board.insert({24, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 }});
+    expected_board.insert({25, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }});
+    expected_board.insert({26, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }});
 
-//    ASSERT_EQ(expected_board, b);
-//}
+    ASSERT_EQ(expected_board, b);
+}
 
-//TEST(get_box_index_first_3_should, return_values_for_4){
-//    auto result = sudoku::solver::get_box_index(0,4,2);
-//    EXPECT_EQ(0,result);
+TEST(get_box_index_first_3_should, return_values_for_4){
+    auto result = sudoku::solver::get_box_index(0,4,2);
+    EXPECT_EQ(0,result);
 
-//    result = sudoku::solver::get_box_index(2,4,2);
-//    EXPECT_EQ(0,result);
+    result = sudoku::solver::get_box_index(2,4,2);
+    EXPECT_EQ(0,result);
 
-//    result = sudoku::solver::get_box_index(32,4,2);
-//    EXPECT_EQ(2,result);
+    result = sudoku::solver::get_box_index(32,4,2);
+    EXPECT_EQ(2,result);
 
-//    result = sudoku::solver::get_box_index(31,4,2);
-//    EXPECT_EQ(1,result);
+    result = sudoku::solver::get_box_index(31,4,2);
+    EXPECT_EQ(1,result);
 
-//    result = sudoku::solver::get_box_index(63,4,2);
-//    EXPECT_EQ(3,result);
-//}
+    result = sudoku::solver::get_box_index(63,4,2);
+    EXPECT_EQ(3,result);
+}
 
-//TEST(get_box_index_first_3_should, return_values_for_9){
-//    auto result = sudoku::solver::get_box_index(0,9,3);
-//    EXPECT_EQ(0,result);
+TEST(get_box_index_first_3_should, return_values_for_9){
+    auto result = sudoku::solver::get_box_index(0,9,3);
+    EXPECT_EQ(0,result);
 
-//    result = sudoku::solver::get_box_index(26,9,3);
-//    EXPECT_EQ(0,result);
+    result = sudoku::solver::get_box_index(26,9,3);
+    EXPECT_EQ(0,result);
 
-//    result = sudoku::solver::get_box_index(27,9,3);
-//    EXPECT_EQ(1,result);
+    result = sudoku::solver::get_box_index(27,9,3);
+    EXPECT_EQ(1,result);
 
-//    result = sudoku::solver::get_box_index(53,9,3);
-//    EXPECT_EQ(1,result);
+    result = sudoku::solver::get_box_index(53,9,3);
+    EXPECT_EQ(1,result);
 
-//    result = sudoku::solver::get_box_index(54,9,3);
-//    EXPECT_EQ(2,result);
+    result = sudoku::solver::get_box_index(54,9,3);
+    EXPECT_EQ(2,result);
 
-//    result = sudoku::solver::get_box_index(80,9,3);
-//    EXPECT_EQ(2,result);
+    result = sudoku::solver::get_box_index(80,9,3);
+    EXPECT_EQ(2,result);
 
-//    result = sudoku::solver::get_box_index(81,9,3);
-//    EXPECT_EQ(0,result);
+    result = sudoku::solver::get_box_index(81,9,3);
+    EXPECT_EQ(0,result);
 
-//    result = sudoku::solver::get_box_index(107,9,3);
-//    EXPECT_EQ(0,result);
+    result = sudoku::solver::get_box_index(107,9,3);
+    EXPECT_EQ(0,result);
 
-//    result = sudoku::solver::get_box_index(108,9,3);
-//    EXPECT_EQ(1,result);
+    result = sudoku::solver::get_box_index(108,9,3);
+    EXPECT_EQ(1,result);
 
-//    result = sudoku::solver::get_box_index(134,9,3);
-//    EXPECT_EQ(1,result);
+    result = sudoku::solver::get_box_index(134,9,3);
+    EXPECT_EQ(1,result);
 
-//    result = sudoku::solver::get_box_index(135,9,3);
-//    EXPECT_EQ(2,result);
+    result = sudoku::solver::get_box_index(135,9,3);
+    EXPECT_EQ(2,result);
 
-//    result = sudoku::solver::get_box_index(161,9,3);
-//    EXPECT_EQ(2,result);
+    result = sudoku::solver::get_box_index(161,9,3);
+    EXPECT_EQ(2,result);
 
-//    result = sudoku::solver::get_box_index(162,9,3);
-//    EXPECT_EQ(0,result);
+    result = sudoku::solver::get_box_index(162,9,3);
+    EXPECT_EQ(0,result);
 
-//    result = sudoku::solver::get_box_index(242,9,3);
-//    EXPECT_EQ(2,result);
+    result = sudoku::solver::get_box_index(242,9,3);
+    EXPECT_EQ(2,result);
 
-//    result = sudoku::solver::get_box_index(243,9,3);
-//    EXPECT_EQ(3,result);
+    result = sudoku::solver::get_box_index(243,9,3);
+    EXPECT_EQ(3,result);
 
-//    result = sudoku::solver::get_box_index(728,9,3);
-//    EXPECT_EQ(8,result);
-//}
+    result = sudoku::solver::get_box_index(728,9,3);
+    EXPECT_EQ(8,result);
+}

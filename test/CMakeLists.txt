@@ -25,6 +25,7 @@ target_link_libraries(SolverTest gtest gmock_main myLib)
 target_link_libraries(DancingLinksTest gtest gmock_main myLib)
 target_link_libraries(DancingLinksSolverTest gtest gmock_main myLib)
 
+configure_file(${PROJECT_SOURCE_DIR}/test/sudoku ${PROJECT_BINARY_DIR}/test/sudoku)
 add_test(MatrixTest MatrixTest)
 add_test(BoardTest BoardTest)
 add_test(SerializerTest SerializerTest)

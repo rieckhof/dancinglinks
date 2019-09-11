@@ -7,9 +7,12 @@
 #include <iostream>
 #include <cassert>
 #include <map>
-
+#include "serializer.h"
+#include "solver.h"
 
 namespace sudoku::dancinglinks {
+
+
 
 class DancingLinks
 {
@@ -62,6 +65,26 @@ private:
     std::shared_ptr<ColumnObj> get_last(std::shared_ptr<ColumnObj> iterator);
     size_t count_elements_start_header(std::shared_ptr<ColumnObj> iterator);
     void insert(std::shared_ptr<ColumnObj>& last, std::shared_ptr<ColumnObj>& nu, size_t index);
+};
+
+
+
+class Transfomer{
+    void transform(sudoku::serializer::TheBoard& input, dancinglinks::DancingLinks& output){
+        solver::TheBoard initial_board = solver::create_initial_board(input.size());
+        size_t col(0);
+        for(auto& vec : input){
+            size_t line(0);
+            for(auto& value : vec){
+                if(value > 0){
+//                   initial_board
+                }
+            ++line;
+            }
+            ++col;
+        }
+
+    }
 };
 
 }

@@ -18,6 +18,7 @@ std::vector<size_t> get_indexes_of_ones_for_col(size_t const& determ_select_col,
 TheBoard create_initial_board(size_t board_size);
 int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size);
 
+bool remove_value(TheBoard& b, size_t col, size_t line, uint16_t value);
 
 
 class SudokuSolver {
