@@ -16,9 +16,15 @@ using TheBoard = std::map<size_t,std::vector<uint16_t>>;
 using SodokuMap = std::unordered_map<std::string, u_int16_t>;
 
 class TheBoardComplex{
+    const size_t board_size;
+    const size_t matrix_size;
 public:
-    TheBoard create_initial_board(size_t board_size, SodokuMap& map);
+    TheBoardComplex(const size_t board_size) : board_size(board_size), matrix_size{board_size * board_size} {}
+    TheBoard create_initial_board(SodokuMap& map);
     int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size);
+    std::vector<SodokuMap>  create_sudoku_solved(std::vector<std::vector<size_t>>const& solutions) const;
+    int calculate_row_index(size_t index4board) const;
+    int calculate_column_index(size_t index4board) const;
 };
 
 

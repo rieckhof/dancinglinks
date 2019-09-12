@@ -65,10 +65,40 @@ TEST(DancingLinks, createMatrix){
     b.insert({4, {0, 0, 1, 0, 1}});
     b.insert({5, {0, 0, 1, 1, 1}});
     dl.create_matrix(b);
-    std::vector<std::vector<size_t>> all_expected_values{{1,7,10,14},
+    std::vector<std::vector<size_t>> all_expected_cols{{1,7,10,14},
                 {2,8,11,15}, {3,12,18,21},
                 {4,16,22}, {5,19,23}};
-    check_all_directions(dl, all_expected_values);
+    check_all_directions(dl, all_expected_cols);
+}
+
+TEST(DancingLinks, createMatrixWith0Row){
+    DancingLinks dl;
+    std::map<size_t, std::vector<uint16_t>> b;
+    b.insert({0, {1, 1, 0, 0, 0}});
+    b.insert({1, {1, 1, 1, 0, 0}});
+    b.insert({3, {1, 1, 0, 1, 0}});
+    b.insert({4, {0, 0, 0, 0, 0}});
+    b.insert({5, {0, 0, 1, 1, 1}});
+    dl.create_matrix(b);
+    std::vector<std::vector<size_t>> all_expected_cols{{1,7,10,14},
+                {2,8,11,15}, {3,12,19},
+                {4,16,20}, {5,21}};
+    check_all_directions(dl, all_expected_cols);
+}
+
+TEST(DancingLinks, createMatrixWith2_0Row){
+    DancingLinks dl;
+    std::map<size_t, std::vector<uint16_t>> b;
+    b.insert({0, {1, 1, 0, 0, 0}});
+    b.insert({1, {1, 1, 1, 0, 0}});
+    b.insert({3, {0, 0, 0, 0, 0}});
+    b.insert({4, {0, 0, 0, 0, 0}});
+    b.insert({5, {0, 0, 1, 1, 1}});
+    dl.create_matrix(b);
+    std::vector<std::vector<size_t>> all_expected_cols{{1,7,10},
+                                                       {2,8,11}, {3,12,16},
+                                                       {4,17}, {5,18}};
+    check_all_directions(dl, all_expected_cols);
 }
 
 TEST(DancingLinks, SpacerTest){
@@ -110,13 +140,13 @@ TEST(DancingLinks, SpacerTest){
 TEST(CreateBoard, create_empty_initial_board2){
     size_t board_size(2);
     size_t should_lines(board_size * board_size *board_size);
-    TheBoardComplex c;
+    TheBoardComplex c(board_size);
     SodokuMap map;
     map.insert({"00",0});
     map.insert({"01",0});
     map.insert({"10",0});
     map.insert({"11",0});
-    TheBoard b = c.create_initial_board(board_size,map);
+    TheBoard b = c.create_initial_board(map);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;
@@ -134,13 +164,13 @@ TEST(CreateBoard, create_empty_initial_board2){
 TEST(CreateBoard, create_initial_board2){
     size_t board_size(2);
     size_t should_lines(board_size * board_size *board_size);
-    TheBoardComplex c;
+    TheBoardComplex c(board_size);
     SodokuMap map;
     map.insert({"00",1});
     map.insert({"01",2});
     map.insert({"10",2});
     map.insert({"11",0});
-    TheBoard b = c.create_initial_board(board_size,map);
+    TheBoard b = c.create_initial_board(map);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;
@@ -159,7 +189,7 @@ TEST(CreateBoard, create_initial_board2){
 TEST(CreateBoard, create_empty_initial_board3){
     size_t board_size(3);
     size_t should_lines(board_size * board_size *board_size);
-    TheBoardComplex c;
+    TheBoardComplex c(board_size);
     SodokuMap map;
     map.insert({"00",0});
     map.insert({"01",0});
@@ -170,7 +200,7 @@ TEST(CreateBoard, create_empty_initial_board3){
     map.insert({"20",0});
     map.insert({"21",0});
     map.insert({"22",0});
-    TheBoard b = c.create_initial_board(board_size,map);
+    TheBoard b = c.create_initial_board(map);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;
@@ -203,13 +233,15 @@ TEST(CreateBoard, create_empty_initial_board3){
     expected_board.insert({26, { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 }});
 
     ASSERT_EQ(expected_board, b);
+    DancingLinks dl;
+    dl.create_matrix(b);
 }
 
 
 TEST(CreateBoard, create_initial_board3){
     size_t board_size(3);
     size_t should_lines(board_size * board_size *board_size);
-    TheBoardComplex c;
+    TheBoardComplex c(board_size);
     SodokuMap map;
     map.insert({"00",3});
     map.insert({"01",1});
@@ -220,7 +252,7 @@ TEST(CreateBoard, create_initial_board3){
     map.insert({"20",0});
     map.insert({"21",0});
     map.insert({"22",0});
-    TheBoard b = c.create_initial_board(board_size,map);
+    TheBoard b = c.create_initial_board(map);
     ASSERT_EQ(should_lines,b.size());
 
     TheBoard expected_board;
@@ -256,7 +288,7 @@ TEST(CreateBoard, create_initial_board3){
 }
 
 TEST(get_box_index_first_3_should, return_values_for_4){
-    TheBoardComplex c;
+    TheBoardComplex c(3);
     auto result = c.get_box_index(0,4,2);
     EXPECT_EQ(0,result);
 
@@ -274,7 +306,7 @@ TEST(get_box_index_first_3_should, return_values_for_4){
 }
 
 TEST(get_box_index_first_3_should, return_values_for_9){
-    TheBoardComplex c;
+    TheBoardComplex c(3);
     auto result = c.get_box_index(0,9,3);
     EXPECT_EQ(0,result);
 

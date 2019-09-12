@@ -21,6 +21,11 @@ public:
         dl.create_matrix(board);
     }
 
+    std::vector<SodokuMap> create_sudoku_solved(TheBoardComplex const& b) const{
+        auto const& temp = get_index_board();
+        return b.create_sudoku_solved(temp);
+    }
+
     void hide(std::shared_ptr<ColumnObj>& p){
         auto q = dl.get_object(p->index + 1);
         while(p != q){
