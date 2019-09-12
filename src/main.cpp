@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
   std::cout << "Starting " << argv[0] << "\n";
   auto start = std::chrono::high_resolution_clock::now().time_since_epoch();
   if (argc < 2) {
-    std::cout << "  Please provide as argumen a file name in the folder where the executable will be called from"
+    std::cout << "  Please provide as argument the file name containg the Puzle. It should be in the folder where the executable is being called"
               << "\n";
     return 0;
   }
@@ -25,9 +25,11 @@ int main(int argc, char** argv) {
   int level(0);
   dls.solve_algo_X(level);
   std::vector<SodokuMap> sol(dls.create_sudoku_solved(c));
-  if (sol.empty())
+  if (sol.empty()){
     std::cout << "  No solution found"
               << "\n";
+  }
+
   auto end = std::chrono::high_resolution_clock::now().time_since_epoch();
   std::chrono::duration<double, std::milli> total_time = end - start;
   std::cout << "Total calculation time: " << total_time.count() << " ms"
