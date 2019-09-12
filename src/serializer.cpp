@@ -49,7 +49,9 @@ void deserialize(std::filesystem::path p, std::unordered_map<std::string, u_int1
         col_index++;
     }
     if(col_index != check_all_same_size){
-        throw std::logic_error("Columns and rows have to be the length");
+        std::cout << "cols "<< col_index << "\n";
+        std::cout << "check_all_same_size " << check_all_same_size << "\n";
+        throw std::logic_error("Columns and rows have to be the same length");
     }
 }
 
