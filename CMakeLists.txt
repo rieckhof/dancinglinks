@@ -20,6 +20,7 @@ if(COVERAGE)
                 COMMAND ${LCOV} -r coverage.run.filtered \"*/googletest-src/*\" -o coverage.run.filtered
                 COMMAND ${GENHTML} --branch-coverage -o ./html/ coverage.run.filtered
             )
+            
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Og -std=c++17" )
 endif()
