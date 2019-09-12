@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
   std::cout << "Starting " << argv[0] << "\n";
   auto start = std::chrono::high_resolution_clock::now().time_since_epoch();
   if (argc < 2) {
-    std::cout << "  Please provide a file in the same folder as the executable"
+    std::cout << "  Please provide as argumen a file name in the folder where the executable will be called from"
               << "\n";
     return 0;
   }
