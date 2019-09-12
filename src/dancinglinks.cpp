@@ -24,11 +24,11 @@ int32_t DancingLinks::get_header_size() const{
     return static_cast<int32_t>(header_size);
 }
 
-DancingLinks::DancingLinks() : letters(number_of_leters){
-    int begin (ascii_code_for_A);
-    std::generate_n(letters.begin(), number_of_leters, [&begin](){
-        return static_cast<char>(begin++);
-    });
+DancingLinks::DancingLinks() {//: letters(number_of_leters){
+//    int begin (ascii_code_for_A);
+//    std::generate_n(letters.begin(), number_of_leters, [&begin](){
+//        return static_cast<char>(begin++);
+//    });
 }
 
 void DancingLinks::make_header(size_t size){
@@ -158,7 +158,7 @@ size_t DancingLinks::count_elements_start_header(std::shared_ptr<ColumnObj> iter
 void DancingLinks::insert(std::shared_ptr<ColumnObj>& last, std::shared_ptr<ColumnObj>& nu, size_t index){
     last->right = nu;
     nu->left = last;
-    nu->name = letters.at(index);
+//    nu->name = letters.at(index);
     nu->index = index +1;
     nu->is_header = true;
 }
@@ -227,14 +227,35 @@ std::vector<SodokuMap> TheBoardComplex::create_sudoku_solved(std::vector<std::ve
             int row_index(calculate_row_index(index4board));
             int value((index4board % board_size) + 1);
             int column_index(calculate_column_index(index4board));
+
             std::string temp{std::to_string(row_index)+std::to_string(column_index)};
             sol.insert({std::move(temp),value});
         }
+        print_solution_to_console(sol);
         result.push_back(sol);
     }
     return result;
 }
 
+void TheBoardComplex::print_solution_to_console(SodokuMap& solution) const{
+    std::cout << "Solution:" << "\n";
+    for(int row = 0; row < board_size; ++row){
+        if(row != 0 and (row % 3)  == 0){
+            for(int col = 0; col < board_size * 3; ++col){
+                std::cout << "-";
+            }
+            std::cout << "\n";
+        }
+        for(int col = 0; col < board_size; ++col){
+            if(col != 0 and (col % 3)  == 0){
+                std::cout << "|";
+            }
+            std::cout << solution.at(std::to_string(row)+std::to_string(col))<< "  ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n";
+}
 
 uint16_t calculate_value_to_set(uint16_t const val_temp, size_t const current_value){
     uint16_t result{0};

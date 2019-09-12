@@ -37,7 +37,7 @@ void deserialize(std::filesystem::path p, std::unordered_map<std::string, u_int1
         }else if(check_all_same_size != line.size()){
             std::cout << "current size "<< line.size();
             std::cout << "previous " << check_all_same_size;
-            throw std::logic_error("All lines in sodoku have to be same length");
+            throw std::logic_error("All lines in sudoku have to be same length");
         }
 
         size_t line_index(0);

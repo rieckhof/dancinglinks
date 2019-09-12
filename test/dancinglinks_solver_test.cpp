@@ -300,12 +300,13 @@ TEST(Solver,ShouldSolveSimpleProbleSize3WithSolution){
     std::vector<SodokuMap> sol(dls.create_sudoku_solved(c));
     ASSERT_EQ(sol.size(),1);
     for(SodokuMap m : sol){
-        for(auto& [index,val] : m){
-            std::cout << index << " " << val << "\n";
-        }
+//        for(auto& [index,val] : m){
+//            std::cout << index << " " << val << "\n";
+//        }
         for(auto& val : expected_vals){
             ASSERT_EQ(val.second, m.at(val.first));
         }
     }
 }
+
 
