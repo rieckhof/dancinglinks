@@ -1,10 +1,10 @@
+#include "solver.h"
+#include <gtest/gtest.h>
 #include "board.h"
 #include "serializer.h"
-#include "solver.h"
 #include "utils.h"
-#include <gtest/gtest.h>
 
-//TEST(Utils, GetRangeFrom0to2) {
+// TEST(Utils, GetRangeFrom0to2) {
 //  std::vector<int> result = sudoku::utils::get_range(0, 2);
 //  ASSERT_EQ(3, result.size());
 //  ASSERT_EQ(0, result.at(0));
@@ -12,7 +12,7 @@
 //  ASSERT_EQ(2, result.at(2));
 //}
 
-//TEST(SolverShould, solveEasySUDOKU) {
+// TEST(SolverShould, solveEasySUDOKU) {
 //  std::string easy_input{"{\"0\":[[],[],[6],[4],[],[9],[5],[],[]],"
 //                         "\"1\":[[],[],[3],[],[2],[],[1],[],[]],"
 //                         "\"2\":[[9],[1],[],[],[7],[],[],[2],[8]],"
@@ -32,9 +32,9 @@
 //  EXPECT_TRUE(col_check);
 //}
 
-using Solver =sudoku::solver::SudokuSolver;
+using Solver = sudoku::solver::SudokuSolver;
 using namespace sudoku::solver;
-//struct SolverShould1 : ::testing::Test{
+// struct SolverShould1 : ::testing::Test{
 //    //    0 = {1, 4, 7};
 //    //    1 = {1, 4};
 //    //    2 = {4, 5, 7};
@@ -53,20 +53,19 @@ using namespace sudoku::solver;
 
 //};
 
-
-//TEST_F(SolverShould1, DetectColumns){
+// TEST_F(SolverShould1, DetectColumns){
 //    Solver solver;
 //    ASSERT_FALSE(solver.no_columns(b));
 //}
 
-//TEST(SolverShould, DetectNoColumns){
+// TEST(SolverShould, DetectNoColumns){
 //    sudoku::solver::TheBoard b;
 
 //    Solver solver;
 //    ASSERT_TRUE(solver.no_columns(b));
 //}
 
-//TEST(SolverShould, GetColumnsWithLeastOnes){
+// TEST(SolverShould, GetColumnsWithLeastOnes){
 //    TheBoard b;
 //    b.insert({0, {1, 0, 0, 1, 0, 0, 1}});
 //    b.insert({1, {1, 0, 0, 1, 0, 0, 0}});
@@ -80,7 +79,7 @@ using namespace sudoku::solver;
 //    ASSERT_EQ(result.first, expected);
 //    ASSERT_EQ(result.second, expected_index);
 //}
-//TEST_F(SolverShould1, GetColumn){
+// TEST_F(SolverShould1, GetColumn){
 
 //    std::vector<uint16_t> result{get_column(b,0)};
 //    std::vector<uint16_t> expected {1,1,0,0,0,0};
@@ -95,7 +94,7 @@ using namespace sudoku::solver;
 //    ASSERT_EQ(result3,expected3);
 //}
 
-//TEST(SolverShould, GetIndexesOfOnes){
+// TEST(SolverShould, GetIndexesOfOnes){
 //    TheBoard b;
 //    b.insert({0, {1, 0, 0, 1, 0, 0, 1}});
 //    b.insert({1, {1, 0, 0, 1, 0, 0, 0}});
@@ -117,7 +116,7 @@ using namespace sudoku::solver;
 //    ASSERT_EQ(ones,expected);
 //}
 
-//TEST_F(SolverShould1, ExecuteStep6){
+// TEST_F(SolverShould1, ExecuteStep6){
 //    Solver s;
 //    std::vector<size_t> indexes {0,3,6};
 //    TheBoard result{s.step6(indexes,b)};
@@ -132,7 +131,7 @@ using namespace sudoku::solver;
 //    ASSERT_EQ(expected, result.at(3));
 //}
 
-//TEST_F(SolverShould1, SolveAlgoX){
+// TEST_F(SolverShould1, SolveAlgoX){
 //    Solver s;
 //    TheSolution result;
 //    TheSolution expected{1,3,5};
@@ -140,7 +139,7 @@ using namespace sudoku::solver;
 //    ASSERT_EQ(expected,result);
 //}
 
-//TEST(SolverShould2, SolveAlgoX){
+// TEST(SolverShould2, SolveAlgoX){
 ////    Gruppe	Anton	Berta	Claudia	Daniel	Eva
 ////    B1	1	1	0	0	0
 ////    B2	1	1	1	0	0

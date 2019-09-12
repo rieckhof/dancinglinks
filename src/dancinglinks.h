@@ -1,86 +1,89 @@
 #ifndef DANCINGLINKS_H
 #define DANCINGLINKS_H
 
+#include <cassert>
+#include <iostream>
+#include <map>
 #include <memory>
 #include <vector>
-#include <vector>
-#include <iostream>
-#include <cassert>
-#include <map>
 #include "serializer.h"
-#include "solver.h"
 
 namespace sudoku::dancinglinks {
 
-using TheBoard = std::map<size_t,std::vector<uint16_t>>;
+using TheBoard = std::map<size_t, std::vector<uint16_t>>;
 using SodokuMap = std::unordered_map<std::string, u_int16_t>;
 
-class TheBoardComplex{
-    const size_t board_size;
-    const size_t matrix_size;
-public:
-    TheBoardComplex(const size_t board_size) : board_size(board_size), matrix_size{board_size * board_size} {}
-    TheBoard create_initial_board(SodokuMap& map);
-    int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size);
-    std::vector<SodokuMap>  create_sudoku_solved(std::vector<std::vector<size_t>>const& solutions) const;
-    int calculate_row_index(size_t index4board) const;
-    int calculate_column_index(size_t index4board) const;
-    void print_solution_to_console(SodokuMap& sol) const;
+class TheBoardComplex {
+  const size_t board_size;
+  const size_t matrix_size;
+
+ public:
+  TheBoardComplex(const size_t board_size)
+      : board_size(board_size), matrix_size{board_size * board_size} {}
+  TheBoard create_initial_board(SodokuMap& map);
+  int get_box_index(size_t row_index,
+                    const size_t board_size,
+                    const ulong sqrt_from_size);
+  std::vector<SodokuMap> create_sudoku_solved(
+      std::vector<std::vector<size_t>> const& solutions) const;
+  size_t calculate_row_index(size_t index4board) const;
+  size_t calculate_column_index(size_t index4board) const;
+  void print_solution_to_console(SodokuMap& sol) const;
 };
 
+class DancingLinks {
+ public:
+  struct ColumnObj {
+    size_t size{0};
+    std::string name{""};
+    size_t index{0};
+    int32_t top_spacer{1};
+    bool is_header{false};
+    std::shared_ptr<ColumnObj> right;
+    std::shared_ptr<ColumnObj> left;
+    std::shared_ptr<ColumnObj> down;
+    std::shared_ptr<ColumnObj> up;
+    std::shared_ptr<ColumnObj> top;
+  };
 
-class DancingLinks
-{
-public:
+  std::shared_ptr<ColumnObj> const& get_root() const;
 
-    struct ColumnObj{
-        size_t size {0};
-        std::string name {""};
-        size_t index {0};
-        int32_t top_spacer {1};
-        bool is_header {false};
-        std::shared_ptr<ColumnObj> right;
-        std::shared_ptr<ColumnObj> left;
-        std::shared_ptr<ColumnObj> down;
-        std::shared_ptr<ColumnObj> up;
-        std::shared_ptr<ColumnObj> top;
-    };
+  std::shared_ptr<ColumnObj> get_item_with_least_options();
 
-    std::shared_ptr<ColumnObj>const& get_root() const;
+  int32_t get_header_size() const;
 
-    std::shared_ptr<ColumnObj> get_item_with_least_options();
+  DancingLinks();
 
-    int32_t get_header_size() const;
+  void make_header(size_t size);
 
-    DancingLinks();
+  std::shared_ptr<ColumnObj> get_object(size_t index) const;
 
-    void make_header(size_t size);
+  void create_matrix(TheBoard const& board);
 
-    std::shared_ptr<ColumnObj> get_object(size_t index) const;
+  void make_row(std::vector<uint16_t> const& data);
 
-    void create_matrix(TheBoard const& board);
+  std::shared_ptr<ColumnObj> get_last_spacer();
 
-    void make_row(std::vector<uint16_t>const& data);
+  std::shared_ptr<ColumnObj> get_start_spacer_from(
+      std::shared_ptr<ColumnObj> const& obj) const;
 
-    std::shared_ptr<ColumnObj> get_last_spacer();
+  void print() const;
 
-    std::shared_ptr<ColumnObj> get_start_spacer_from(std::shared_ptr<ColumnObj>const& obj) const;
+ private:
+  constexpr static int number_of_leters{35};
+  constexpr static int ascii_code_for_A{65};
+  std::shared_ptr<ColumnObj> root{std::make_shared<ColumnObj>()};
+  //    std::vector<char> letters;
+  size_t header_size{0};  // no root
+  int spacer_counter{0};
+  std::vector<std::shared_ptr<ColumnObj>> objs;  // begin() ColumnObj->index = 1
 
-    void print() const;
-
-private:
-    constexpr static int number_of_leters{35};
-    constexpr static int ascii_code_for_A{65};
-    std::shared_ptr<ColumnObj> root {std::make_shared<ColumnObj>()};
-//    std::vector<char> letters;
-    size_t header_size{0}; // no root
-    int spacer_counter{0};
-    std::vector<std::shared_ptr<ColumnObj>> objs; //begin() ColumnObj->index = 1
-
-    std::shared_ptr<ColumnObj> get_last(std::shared_ptr<ColumnObj> iterator);
-    size_t count_elements_start_header(std::shared_ptr<ColumnObj> iterator);
-    void insert(std::shared_ptr<ColumnObj>& last, std::shared_ptr<ColumnObj>& nu, size_t index);
+  std::shared_ptr<ColumnObj> get_last(std::shared_ptr<ColumnObj> iterator);
+  size_t count_elements_start_header(std::shared_ptr<ColumnObj> iterator);
+  void insert(std::shared_ptr<ColumnObj>& last,
+              std::shared_ptr<ColumnObj>& nu,
+              size_t index);
 };
 
-}
-#endif // DANCINGLINKS_H
+}  // namespace sudoku::dancinglinks
+#endif  // DANCINGLINKS_H

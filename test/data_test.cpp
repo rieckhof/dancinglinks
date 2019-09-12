@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include "sudoku_matrix.h"
 #include <gtest/gtest.h>
+#include "sudoku_matrix.h"
 
 using namespace sudoku::datastruct;
 
@@ -47,7 +47,7 @@ TEST(MatrixTest, CopyValues) {
   m_big.init_to_empty();
   int c = 0;
 
-  for (auto const &val : m_big.get_internal()) {
+  for (auto const& val : m_big.get_internal()) {
     EXPECT_EQ(m_big[val.first], matrix_value_depth(0));
     ++c;
   }
@@ -75,7 +75,7 @@ struct GetterSetterTest : public ::testing::Test {
   std::vector<matrix_value_depth> result;
   virtual void SetUp() { m_big.init_to_empty(); }
 
-  void check(std::vector<matrix_value_depth> const &result) {
+  void check(std::vector<matrix_value_depth> const& result) {
     EXPECT_EQ(expected.size(), result.size());
     EXPECT_EQ(expected, result);
   }

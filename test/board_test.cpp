@@ -28,7 +28,7 @@ TEST(BoardTest, InitBoard) {
   matrix_value_depth expected(0);
   int c = 0;
 
-  for (auto &m : internal_b) {
+  for (auto& m : internal_b) {
     ++c;
     matrix_value_depth temp = m[{1, 2}];
     EXPECT_EQ(temp, expected);
@@ -41,7 +41,7 @@ using matrix_value_depth = sudoku::datastruct::Matrix::matrix_value_depth;
 std::vector<matrix_value_depth> fill_values() {
   std::vector<matrix_value_depth> result(9);
   uint16_t counter{1};
-  for (matrix_value_depth &r : result) {
+  for (matrix_value_depth& r : result) {
     uint16_t to_insert = counter;
     r.insert(to_insert);
     ++counter;
@@ -49,12 +49,12 @@ std::vector<matrix_value_depth> fill_values() {
   return result;
 }
 
-std::vector<matrix_value_depth> fill_values(std::vector<uint16_t> &&input) {
+std::vector<matrix_value_depth> fill_values(std::vector<uint16_t>&& input) {
   std::vector<matrix_value_depth> result(9);
   assert(input.size() == result.size());
 
   uint16_t index{0};
-  for (matrix_value_depth &r : result) {
+  for (matrix_value_depth& r : result) {
     r.insert(input.at(index));
     ++index;
   }
@@ -103,8 +103,8 @@ TEST(BoardTest, setLine) {
   }
 }
 
-matrix_value_depth get_diference(matrix_value_depth &expected,
-                                 matrix_value_depth &real) {
+matrix_value_depth get_diference(matrix_value_depth& expected,
+                                 matrix_value_depth& real) {
   matrix_value_depth result;
   std::set_difference(expected.begin(), expected.end(), real.begin(),
                       real.end(), std::inserter(result, result.begin()));

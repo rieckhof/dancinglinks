@@ -21,7 +21,7 @@ if(COVERAGE)
                 COMMAND ${GENHTML} --branch-coverage -o ./html/ coverage.run.filtered
             )
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -std=c++17" )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Og -std=c++17" )
 endif()
 unset(COVERAGE)
 
