@@ -1,5 +1,5 @@
 # Dancing Links / Sudoku solver
-This is an implementation of the Dancing Links algorithm from Donald E. Knuth found [here](https://www-cs-faculty.stanford.edu/~knuth/news.html). There is also an adapter for using Dancing Links for solving sudokus from size NxN. Maybe in the future I could have more adapters to solve other problems N queens.
+This is an implementation of the Dancing Links algorithm from Donald E. Knuth found [here](https://www-cs-faculty.stanford.edu/~knuth/news.html). There is also an adapter for using Dancing Links for solving sudokus from size NxN. Maybe in the future I could have more adapters to solve other problems like N queens.
 
 The implementation is using C++17. I compiled it in a Ubuntu 18.04 with gcc 9.1.
 
