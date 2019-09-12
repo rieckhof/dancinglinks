@@ -10,13 +10,7 @@
 namespace sudoku {
 namespace serializer {
 
-using Board = datastruct::Board;
-using TheBoard = std::vector<std::vector<uint16_t>>;
-
-//std::string serialize(Board const &board);
-//Board deserialze(std::string const &json);
-
-void deserialize(std::filesystem::path p, TheBoard& b,std::unordered_map<std::string, u_int16_t>& map);
+void deserialize(std::filesystem::path p, std::unordered_map<std::string, u_int16_t>& map);
 
 
 } // namespace serializer

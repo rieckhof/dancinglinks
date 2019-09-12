@@ -1,5 +1,6 @@
 #include "dancinglinks.h"
 #include <algorithm>
+#include <math.h>
 
 namespace sudoku::dancinglinks {
 
@@ -56,18 +57,18 @@ void DancingLinks::create_matrix(std::map<size_t, std::vector<uint16_t>>const& b
     for(auto& [index, data] : board){
         make_row(data);
     }
-    std::for_each(objs.begin(), objs.begin() + get_header_size(),
-                  [this](std::shared_ptr<ColumnObj>& header){
-                        header->size = count_elements_start_header(header);
-                        auto last = get_last(header);
-                        header->up = last;
-                        last->down = header;
-                  });
-    auto last_spacer = std::make_shared<ColumnObj>();
-    last_spacer->up = get_object(get_last_spacer()->index +1);
-    last_spacer->top_spacer = spacer_counter--;
-    last_spacer->index = objs.back()->index +1;
-    objs.push_back(last_spacer);
+//    std::for_each(objs.begin(), objs.begin() + get_header_size(),
+//                  [this](std::shared_ptr<ColumnObj>& header){
+//                        header->size = count_elements_start_header(header);
+//                        auto last = get_last(header);
+//                        header->up = last;
+//                        last->down = header;
+//                  });
+//    auto last_spacer = std::make_shared<ColumnObj>();
+//    last_spacer->up = get_object(get_last_spacer()->index +1);
+//    last_spacer->top_spacer = spacer_counter--;
+//    last_spacer->index = objs.back()->index +1;
+//    objs.push_back(last_spacer);
 }
 
 
@@ -159,4 +160,121 @@ void DancingLinks::insert(std::shared_ptr<ColumnObj>& last, std::shared_ptr<Colu
     nu->index = index +1;
     nu->is_header = true;
 }
+
+int TheBoardComplex::get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size){
+    const size_t break_loop = board_size * board_size * board_size;
+    assert(row_index < break_loop);
+
+    size_t counter_box_cols(0);
+    size_t counter_box_lines(0);
+    int result(0);
+    size_t start_multi(0);
+    size_t end_multi(sqrt_from_size);
+    unsigned long start(0);
+    unsigned long end(0);
+    while(end <= break_loop){
+        start = board_size * start_multi;
+        end = (board_size * end_multi) - 1;
+//        std::cout << "start " << start << std::endl;
+//        std::cout << "end " << end<< std::endl;
+//        std::cout << "value " << result<< std::endl;
+
+        if(start <= row_index and row_index <= end){
+            return result;
+        }
+        start_multi += sqrt_from_size;
+        end_multi += sqrt_from_size;
+        ++counter_box_cols;
+        ++result;
+
+        if(counter_box_cols % sqrt_from_size == 0){
+            ++counter_box_lines;
+            if(counter_box_lines % sqrt_from_size != 0){
+                result -= sqrt_from_size;
+            }
+        }
+    }
+    return -1;
+}
+
+uint16_t calculate_value_to_set(uint16_t const val_temp, size_t const current_value){
+    uint16_t result{0};
+    if(val_temp == 0){
+        result = 1;
+    }else if(val_temp == current_value){
+        result = 1;
+    }
+    return result;
+}
+
+TheBoard TheBoardComplex::create_initial_board(const size_t board_size, SodokuMap& map){
+    TheBoard b;
+    size_t constraints (3);
+    const ulong sqrt_from_size{static_cast<ulong>(
+                    std::lround( std::sqrt( board_size )))};
+    if( sqrt_from_size * sqrt_from_size == board_size ){
+        constraints++;
+    }
+
+    size_t current_value(0);
+    size_t current_row(0);
+    size_t current_col(0);
+    size_t col_vs_row(0);
+    const size_t matrix_size{board_size * board_size};
+    size_t& colum_index_sodoku = current_row;
+    size_t row_index_sodoku(0);
+    for(size_t row_index = 0; row_index < std::pow(board_size,3); ++row_index) {
+//        std::cout << "val " << current_value +1 << std::endl;
+//        std::cout << "col " << colum_index_sodoku % board_size << std::endl;
+//        std::cout << "row " << row_index_sodoku << std::endl;
+//        std::cout << std::endl;
+        auto val_temp = map.at(std::to_string(row_index_sodoku)
+                                + std::to_string(colum_index_sodoku % board_size));
+        uint16_t value_to_set = calculate_value_to_set(val_temp, current_value + 1);
+
+        size_t constraint_counter(1);
+        std::vector<uint16_t> row (matrix_size * constraints, 0);
+        //constraint Row-Column
+        row.at(current_row) = value_to_set;
+
+        //constraint Row
+        size_t index_offset(matrix_size * constraint_counter);
+        size_t col_index{(index_offset + current_value + current_col)};
+        row.at(col_index) = value_to_set;
+        ++constraint_counter;
+
+        //constraint Column
+        size_t index_offset_c(matrix_size * constraint_counter);
+        row.at(index_offset_c + col_vs_row) = value_to_set;
+
+        if(constraints == 4) {
+            ++constraint_counter;
+            auto box = get_box_index(row_index,board_size,sqrt_from_size);
+            assert(box != -1);
+            size_t index_offset_const(matrix_size * constraint_counter);
+            auto box_index = box * board_size;
+            auto index_inside_box = col_vs_row % board_size;
+            row.at(index_offset_const + box_index + index_inside_box) = value_to_set;
+        }
+
+        ++current_value;
+        if(current_value == board_size){
+            current_value = 0;
+            ++current_row;
+        }
+
+        ++col_vs_row;
+        if(col_vs_row == matrix_size){
+             row_index_sodoku++;
+             current_col += board_size;
+             col_vs_row = 0;
+        }
+
+        b.insert({row_index, std::move(row)});
+    }
+    return b;
+}
+
+
+
 }

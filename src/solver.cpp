@@ -1,6 +1,5 @@
 #include "solver.h"
 #include "utils.h"
-#include <math.h>
 #include <exception>
 
 namespace sudoku {
@@ -8,112 +7,6 @@ namespace solver {
 
 using field_value = datastruct::Board::matrix_value_depth;
 
-int TheBoardComplex::get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size){
-    const size_t break_loop = board_size * board_size * board_size;
-    assert(row_index < break_loop);
-
-    size_t counter_box_cols(0);
-    size_t counter_box_lines(0);
-    int result(0);
-    size_t start_multi(0);
-    size_t end_multi(sqrt_from_size);
-    unsigned long start(0);
-    unsigned long end(0);
-    while(end <= break_loop){
-        start = board_size * start_multi;
-        end = (board_size * end_multi) - 1;
-//        std::cout << "start " << start << std::endl;
-//        std::cout << "end " << end<< std::endl;
-//        std::cout << "value " << result<< std::endl;
-
-        if(start <= row_index and row_index <= end){
-            return result;
-        }
-        start_multi += sqrt_from_size;
-        end_multi += sqrt_from_size;
-        ++counter_box_cols;
-        ++result;
-
-        if(counter_box_cols % sqrt_from_size == 0){
-            ++counter_box_lines;
-            if(counter_box_lines % sqrt_from_size != 0){
-                result -= sqrt_from_size;
-            }
-        }
-    }
-    return -1;
-}
-
-uint16_t calculate_value_to_set(uint16_t val_temp, size_t current_value){
-    uint16_t result{0};
-    if(val_temp == 0){
-        result = 1;
-    }else if(val_temp == current_value){
-        result = 1;
-    }
-    return result;
-}
-
-TheBoard TheBoardComplex::create_initial_board(const size_t board_size, std::unordered_map<std::string, u_int16_t>& map){
-    TheBoard b;
-    size_t constraints (3);
-    const ulong sqrt_from_size{static_cast<ulong>(
-                    std::lround( std::sqrt( board_size )))};
-    if( sqrt_from_size * sqrt_from_size == board_size ){
-        constraints++;
-    }
-
-    size_t current_value(0);
-    size_t current_row(0);
-    size_t current_col(0);
-    size_t col_vs_row(0);
-    const size_t matrix_size{board_size * board_size};
-
-    for(size_t row_index = 0; row_index < std::pow(board_size,3); ++row_index) {
-        auto val_temp = map.at(std::to_string(current_col % board_size)
-                                + std::to_string(current_row % board_size));
-        uint16_t value_to_set = calculate_value_to_set(val_temp,current_value);
-        size_t constraint_counter(1);
-        std::vector<uint16_t> row (matrix_size * constraints, 0);
-        //constraint Row-Column
-        row.at(current_row) = value_to_set;
-
-        //constraint Row
-        size_t index_offset(matrix_size * constraint_counter);
-        size_t col_index{(index_offset + current_value + current_col)};
-        row.at(col_index) = value_to_set;
-        ++constraint_counter;
-
-        //constraint Column
-        size_t index_offset_c(matrix_size * constraint_counter);
-        row.at(index_offset_c + col_vs_row) = value_to_set;
-
-        if(constraints == 4) {
-            ++constraint_counter;
-            auto box = get_box_index(row_index,board_size,sqrt_from_size);
-            assert(box != -1);
-            size_t index_offset_const(matrix_size * constraint_counter);
-            auto box_index = box * board_size;
-            auto index_inside_box = col_vs_row % board_size;
-            row.at(index_offset_const + box_index + index_inside_box) = value_to_set;
-        }
-
-        ++current_value;
-        if(current_value == board_size){
-            current_value = 0;
-            ++current_row;
-        }
-
-        ++col_vs_row;
-        if(col_vs_row == matrix_size){
-             current_col += board_size;
-             col_vs_row = 0;
-        }
-
-        b.insert({row_index, std::move(row)});
-    }
-    return b;
-}
 
 
 datastruct::Board SudokuSolver::solve(datastruct::Board &b) {

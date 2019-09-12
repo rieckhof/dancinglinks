@@ -12,6 +12,14 @@
 
 namespace sudoku::dancinglinks {
 
+using TheBoard = std::map<size_t,std::vector<uint16_t>>;
+using SodokuMap = std::unordered_map<std::string, u_int16_t>;
+
+class TheBoardComplex{
+public:
+    TheBoard create_initial_board(size_t board_size, SodokuMap& map);
+    int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size);
+};
 
 
 class DancingLinks
@@ -43,7 +51,7 @@ public:
 
     std::shared_ptr<ColumnObj> get_object(size_t index) const;
 
-    void create_matrix(std::map<size_t, std::vector<uint16_t>>const& board);
+    void create_matrix(TheBoard const& board);
 
     void make_row(std::vector<uint16_t>const& data);
 
@@ -65,28 +73,6 @@ private:
     std::shared_ptr<ColumnObj> get_last(std::shared_ptr<ColumnObj> iterator);
     size_t count_elements_start_header(std::shared_ptr<ColumnObj> iterator);
     void insert(std::shared_ptr<ColumnObj>& last, std::shared_ptr<ColumnObj>& nu, size_t index);
-};
-
-
-
-class Transfomer{
-    void transform(sudoku::serializer::TheBoard& input, dancinglinks::DancingLinks& output){
-        solver::TheBoardComplex c;
-        std::unordered_map<std::string, u_int16_t> map;
-        solver::TheBoard initial_board = c.create_initial_board(input.size(),map);
-        size_t col(0);
-        for(auto& vec : input){
-            size_t line(0);
-            for(auto& value : vec){
-                if(value > 0){
-//                   initial_board
-                }
-            ++line;
-            }
-            ++col;
-        }
-
-    }
 };
 
 }

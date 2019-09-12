@@ -15,15 +15,6 @@ std::vector<uint16_t> get_column(TheBoard const& b, size_t column_index);
 std::vector<size_t> get_indexes_of_ones(std::vector<uint16_t> const& determ_select_col);
 std::vector<size_t> get_indexes_of_ones_for_col(size_t const& determ_select_col, TheBoard const& b);
 
-class TheBoardComplex{
-public:
-    TheBoard create_initial_board(size_t board_size, std::unordered_map<std::string, u_int16_t>& map);
-    int get_box_index(size_t row_index, const size_t board_size, const ulong sqrt_from_size);   
-};
-
-
-
-
 class SudokuSolver {
 public:
   datastruct::Board solve(datastruct::Board &b);
