@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 
   std::cout << "  Reading " << argv[1] << "\n";
   sudoku::serializer::deserialize(p, map);
-  TheBoardComplex c(9);
+  SudokuAdapter c(9);
   TheBoard b = c.create_initial_board(map);
   std::cout << "  Starting Solver "
             << "\n";

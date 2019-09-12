@@ -261,7 +261,7 @@ TEST(Solver, ShouldSolveSimpleProbleSize2) {
   map.insert({"01", 2});
   map.insert({"10", 2});
   map.insert({"11", 0});
-  TheBoardComplex c(2);
+  SudokuAdapter c(2);
   TheBoard b = c.create_initial_board(map);
   DancingLinksSolver dls(b);
   int level(0);
@@ -280,7 +280,7 @@ TEST(Solver, ShouldSolveSimpleProbleSize3) {
   map.insert({"20", 0});
   map.insert({"21", 0});
   map.insert({"22", 0});
-  TheBoardComplex c(3);
+  SudokuAdapter c(3);
   TheBoard b = c.create_initial_board(map);
   DancingLinksSolver dls(b);
   int level(0);
@@ -305,7 +305,7 @@ TEST(Solver, ShouldSolveSimpleProbleSize3WithSolution) {
       {"00", 3}, {"01", 1}, {"02", 2}, {"10", 1}, {"11", 2},
       {"12", 3}, {"20", 2}, {"21", 3}, {"22", 1}};
 
-  TheBoardComplex c(3);
+  SudokuAdapter c(3);
   TheBoard b = c.create_initial_board(map);
   DancingLinksSolver dls(b);
   int level(0);

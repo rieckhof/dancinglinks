@@ -22,7 +22,7 @@ class DancingLinksSolver {
   DancingLinks dl;
   DancingLinksSolver(std::map<size_t, std::vector<uint16_t>> const& board);
 
-  std::vector<SodokuMap> create_sudoku_solved(TheBoardComplex const& b) const;
+  std::vector<SodokuMap> create_sudoku_solved(SudokuAdapter const& b) const;
 
   void cover(std::shared_ptr<ColumnObj> const& header);
 

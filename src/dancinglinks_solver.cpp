@@ -8,7 +8,7 @@ DancingLinksSolver::DancingLinksSolver(
 }
 
 std::vector<SodokuMap> DancingLinksSolver::create_sudoku_solved(
-    TheBoardComplex const& b) const {
+    SudokuAdapter const& b) const {
   auto const& temp = get_index_board();
   return b.create_sudoku_solved(temp);
 }

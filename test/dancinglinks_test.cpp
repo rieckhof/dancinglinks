@@ -136,7 +136,7 @@ TEST(DancingLinks, SpacerTest) {
 TEST(CreateBoard, create_empty_initial_board2) {
   size_t board_size(2);
   size_t should_lines(board_size * board_size * board_size);
-  TheBoardComplex c(board_size);
+  SudokuAdapter c(board_size);
   SodokuMap map;
   map.insert({"00", 0});
   map.insert({"01", 0});
@@ -160,7 +160,7 @@ TEST(CreateBoard, create_empty_initial_board2) {
 TEST(CreateBoard, create_initial_board2) {
   size_t board_size(2);
   size_t should_lines(board_size * board_size * board_size);
-  TheBoardComplex c(board_size);
+  SudokuAdapter c(board_size);
   SodokuMap map;
   map.insert({"00", 1});
   map.insert({"01", 2});
@@ -185,7 +185,7 @@ TEST(CreateBoard, create_initial_board2) {
 TEST(CreateBoard, create_empty_initial_board3) {
   size_t board_size(3);
   size_t should_lines(board_size * board_size * board_size);
-  TheBoardComplex c(board_size);
+  SudokuAdapter c(board_size);
   SodokuMap map;
   map.insert({"00", 0});
   map.insert({"01", 0});
@@ -263,7 +263,7 @@ TEST(CreateBoard, create_empty_initial_board3) {
 TEST(CreateBoard, create_initial_board3) {
   size_t board_size(3);
   size_t should_lines(board_size * board_size * board_size);
-  TheBoardComplex c(board_size);
+  SudokuAdapter c(board_size);
   SodokuMap map;
   map.insert({"00", 3});
   map.insert({"01", 1});
@@ -337,7 +337,7 @@ TEST(CreateBoard, create_initial_board3) {
 }
 
 TEST(get_box_index_first_3_should, return_values_for_4) {
-  TheBoardComplex c(3);
+  SudokuAdapter c(3);
   auto result = c.get_box_index(0, 4, 2);
   EXPECT_EQ(0, result);
 
@@ -355,7 +355,7 @@ TEST(get_box_index_first_3_should, return_values_for_4) {
 }
 
 TEST(get_box_index_first_3_should, return_values_for_9) {
-  TheBoardComplex c(3);
+  SudokuAdapter c(3);
   auto result = c.get_box_index(0, 9, 3);
   EXPECT_EQ(0, result);
 

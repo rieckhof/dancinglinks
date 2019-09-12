@@ -13,22 +13,27 @@ namespace sudoku::dancinglinks {
 using TheBoard = std::map<size_t, std::vector<uint16_t>>;
 using SodokuMap = std::unordered_map<std::string, u_int16_t>;
 
-class TheBoardComplex {
+class SudokuAdapter {
   const size_t board_size;
   const size_t matrix_size;
+  size_t calculate_row_index(size_t index4board) const;
+
+  size_t calculate_column_index(size_t index4board) const;
 
  public:
-  TheBoardComplex(const size_t board_size)
+  SudokuAdapter(const size_t board_size)
       : board_size(board_size), matrix_size{board_size * board_size} {}
-  TheBoard create_initial_board(SodokuMap& map);
+
+  TheBoard create_initial_board(SodokuMap const& map);
+
   int get_box_index(size_t row_index,
                     const size_t board_size,
                     const ulong sqrt_from_size);
+
   std::vector<SodokuMap> create_sudoku_solved(
       std::vector<std::vector<size_t>> const& solutions) const;
-  size_t calculate_row_index(size_t index4board) const;
-  size_t calculate_column_index(size_t index4board) const;
-  void print_solution_to_console(SodokuMap& sol) const;
+
+  void print_solution_to_console(SodokuMap const& sol) const;
 };
 
 class DancingLinks {
@@ -79,7 +84,9 @@ class DancingLinks {
   std::vector<std::shared_ptr<ColumnObj>> objs;  // begin() ColumnObj->index = 1
 
   std::shared_ptr<ColumnObj> get_last(std::shared_ptr<ColumnObj> iterator);
+
   size_t count_elements_start_header(std::shared_ptr<ColumnObj> iterator);
+
   void insert(std::shared_ptr<ColumnObj>& last,
               std::shared_ptr<ColumnObj>& nu,
               size_t index);

@@ -172,7 +172,7 @@ void DancingLinks::insert(std::shared_ptr<ColumnObj>& last,
   nu->is_header = true;
 }
 
-int TheBoardComplex::get_box_index(size_t row_index,
+int SudokuAdapter::get_box_index(size_t row_index,
                                    const size_t board_size,
                                    const ulong sqrt_from_size) {
   const size_t break_loop = board_size * board_size * board_size;
@@ -210,7 +210,7 @@ int TheBoardComplex::get_box_index(size_t row_index,
   return -1;
 }
 
-size_t TheBoardComplex::calculate_row_index(size_t index4board) const {
+size_t SudokuAdapter::calculate_row_index(size_t index4board) const {
   size_t column_index(0);
   while (index4board >= matrix_size) {
     column_index++;
@@ -219,7 +219,7 @@ size_t TheBoardComplex::calculate_row_index(size_t index4board) const {
   return column_index;
 }
 
-size_t TheBoardComplex::calculate_column_index(size_t index4board) const {
+size_t SudokuAdapter::calculate_column_index(size_t index4board) const {
   size_t column_index(0);
   while (index4board >= board_size) {
     column_index++;
@@ -228,7 +228,7 @@ size_t TheBoardComplex::calculate_column_index(size_t index4board) const {
   return column_index % board_size;
 }
 
-std::vector<SodokuMap> TheBoardComplex::create_sudoku_solved(
+std::vector<SodokuMap> SudokuAdapter::create_sudoku_solved(
     std::vector<std::vector<size_t>> const& solutions) const {
   std::vector<SodokuMap> result;
   for (auto& solution_indexes : solutions) {
@@ -250,7 +250,7 @@ std::vector<SodokuMap> TheBoardComplex::create_sudoku_solved(
   return result;
 }
 
-void TheBoardComplex::print_solution_to_console(SodokuMap& solution) const {
+void SudokuAdapter::print_solution_to_console(SodokuMap const& solution) const {
   std::cout << "Solution:"
             << "\n";
   for (size_t row = 0; row < board_size; ++row) {
@@ -283,7 +283,7 @@ uint16_t calculate_value_to_set(uint16_t const val_temp,
   return result;
 }
 
-TheBoard TheBoardComplex::create_initial_board(SodokuMap& map) {
+TheBoard SudokuAdapter::create_initial_board(SodokuMap const& map) {
   TheBoard b;
   size_t constraints(3);
   const ulong sqrt_from_size{

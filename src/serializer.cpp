@@ -18,7 +18,7 @@ namespace serializer {
  *3 1 0
  */
 
-void deserialize(std::filesystem::path p,
+void deserialize(std::filesystem::path const& p,
                  std::unordered_map<std::string, u_int16_t>& map) {
   assert(std::filesystem::exists(p));
 
