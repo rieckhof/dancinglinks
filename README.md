@@ -1,6 +1,5 @@
 # Dancing Links / Sudoku solver
-This is an implementation of the Dancing Links algorithm from Donald E. Knuth found [here](https://www-cs-faculty.stanford.edu/~knuth/news.html). There is also an adapter for using Dancing Links for solving sudokus
-from size NxN
+This is an implementation of the Dancing Links algorithm from Donald E. Knuth found [here](https://www-cs-faculty.stanford.edu/~knuth/news.html). There is also an adapter for using Dancing Links for solving sudokus from size NxN. Maybe in the future I could have more adapters to solve other problems N queens.
 
 ## How to build from Console:
 * Create a build folder inside the checkout repository
@@ -17,3 +16,4 @@ from size NxN
 * The file must be on the same folder where you are calling the binary
 * The solver can solve puzzles from a any size as long as it
 has the same amount of rows and columns. I have only tested until 9x9 but in theory it could be higher.
+* The solution will be output to console 
