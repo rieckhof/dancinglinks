@@ -1,5 +1,5 @@
 #include "dancinglinks.h"
-#include <math.h>
+
 #include <algorithm>
 
 namespace sudoku::dancinglinks {
@@ -254,14 +254,14 @@ void SudokuAdapter::print_solution_to_console(SodokuMap const& solution) const {
   std::cout << "Solution:"
             << "\n";
   for (size_t row = 0; row < board_size; ++row) {
-    if (row != 0 and (row % 3) == 0) {
-      for (size_t col = 0; col < board_size * 3; ++col) {
+    if (row != 0 and constraints == 4 and (row % sqrt_from_size) == 0 ) {
+      for (size_t col = 0; col < board_size * sqrt_from_size; ++col) {
         std::cout << "-";
       }
       std::cout << "\n";
     }
     for (size_t col = 0; col < board_size; ++col) {
-      if (col != 0 and (col % 3) == 0) {
+      if (col != 0 and constraints == 4 and (col % sqrt_from_size) == 0) {
         std::cout << "|";
       }
       std::cout << solution.at(std::to_string(row) + std::to_string(col))
@@ -285,9 +285,7 @@ uint16_t calculate_value_to_set(uint16_t const val_temp,
 
 TheBoard SudokuAdapter::create_initial_board(SodokuMap const& map) {
   TheBoard b;
-  size_t constraints(3);
-  const ulong sqrt_from_size{
-      static_cast<ulong>(std::lround(std::sqrt(board_size)))};
+
   if (sqrt_from_size * sqrt_from_size == board_size) {
     constraints++;
   }

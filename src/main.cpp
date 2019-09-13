@@ -15,8 +15,8 @@ int main(int argc, char** argv) {
   SodokuMap map;
 
   std::cout << "  Reading " << argv[1] << "\n";
-  sudoku::serializer::deserialize(p, map);
-  SudokuAdapter c(9);
+  size_t size = sudoku::serializer::deserialize(p, map);
+  SudokuAdapter c(size);
   TheBoard b = c.create_initial_board(map);
   std::cout << "  Starting Solver "
             << "\n";

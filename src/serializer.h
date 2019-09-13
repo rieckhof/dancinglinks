@@ -10,7 +10,7 @@
 namespace sudoku {
 namespace serializer {
 
-void deserialize(std::filesystem::path const& p,
+size_t deserialize(std::filesystem::path const& p,
                  std::unordered_map<std::string, u_int16_t>& map);
 
 }  // namespace serializer

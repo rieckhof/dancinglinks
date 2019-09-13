@@ -18,7 +18,7 @@ namespace serializer {
  *3 1 0
  */
 
-void deserialize(std::filesystem::path const& p,
+size_t deserialize(std::filesystem::path const& p,
                  std::unordered_map<std::string, u_int16_t>& map) {
   assert(std::filesystem::exists(p));
 
@@ -45,7 +45,10 @@ void deserialize(std::filesystem::path const& p,
     size_t line_index(0);
     for (auto value : line) {
       std::string temp{std::to_string(col_index) + std::to_string(line_index)};
-      map.insert({std::move(temp), value - ASCCI_ZERO});
+      auto to_insert = value - ASCCI_ZERO;
+      if (to_insert > check_all_same_size)
+          throw std::logic_error("values has to be between 1 and size of a row");
+      map.insert({std::move(temp), to_insert});
       line_index++;
     }
     col_index++;
@@ -55,6 +58,7 @@ void deserialize(std::filesystem::path const& p,
     std::cout << "check_all_same_size " << check_all_same_size << "\n";
     throw std::logic_error("Columns and rows have to be the same length");
   }
+  return check_all_same_size;
 }
 
 }  // namespace serializer

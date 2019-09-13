@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 #include "serializer.h"
+#include <math.h>
 
 namespace sudoku::dancinglinks {
 
@@ -16,13 +17,17 @@ using SodokuMap = std::unordered_map<std::string, u_int16_t>;
 class SudokuAdapter {
   const size_t board_size;
   const size_t matrix_size;
+  size_t constraints{3};
+  const ulong sqrt_from_size;
+
   size_t calculate_row_index(size_t index4board) const;
 
   size_t calculate_column_index(size_t index4board) const;
 
  public:
   SudokuAdapter(const size_t board_size)
-      : board_size(board_size), matrix_size{board_size * board_size} {}
+      : board_size(board_size), matrix_size{board_size * board_size},
+        sqrt_from_size(static_cast<ulong>(std::lround(std::sqrt(board_size)))) {}
 
   TheBoard create_initial_board(SodokuMap const& map);
 
