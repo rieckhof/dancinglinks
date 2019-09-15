@@ -149,6 +149,17 @@ std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_last(
   return iterator;
 }
 
+DancingLinks::~DancingLinks(){
+    std::for_each(objs.begin(), objs.end(),
+                 [](std::shared_ptr<ColumnObj>& obj){
+        obj->down = nullptr;
+        obj->up = nullptr;
+        obj->right = nullptr;
+        obj->left = nullptr;
+        obj->top = nullptr;
+    });
+}
+
 size_t DancingLinks::count_elements_start_header(
     std::shared_ptr<ColumnObj> iterator) {
   size_t result(0);

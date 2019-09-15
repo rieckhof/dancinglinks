@@ -64,6 +64,8 @@ class DancingLinks {
 
   DancingLinks();
 
+  ~DancingLinks();
+
   void make_header(size_t size);
 
   std::shared_ptr<ColumnObj> get_object(size_t index) const;
