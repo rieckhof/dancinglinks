@@ -25,19 +25,15 @@ TEST(DancingLinks, ShouldCreateHeaderOf3Length) {
   ASSERT_EQ(dl.get_root()->left->left->left->left->left, dl.get_root()->left);
 }
 
-TEST(DancingLinksShould, get_last_spacer_return_null) {
-  DancingLinks dl;
-  dl.make_header(4);
-  ASSERT_FALSE(dl.get_last_spacer());
-}
-
-TEST(DancingLinksShould, make_line_cerates_line) {
+TEST(DancingLinksShould, make_line_creates_line) {
   DancingLinks dl;
   dl.make_header(4);
   std::vector<uint16_t> row1{1, 0, 0, 1};
   std::vector<uint16_t> row2{1, 0, 1, 0};
-  dl.make_row(row1);
-  dl.make_row(row2);
+  std::shared_ptr<DancingLinks::ColumnObj> temp_spacer = nullptr;
+  dl.make_row(row1, temp_spacer);
+  dl.make_row(row2, temp_spacer);
+
   ASSERT_EQ(dl.get_object(1)->down->index, 6);
   ASSERT_EQ(dl.get_object(1)->down->down->index, 9);
   ASSERT_EQ(dl.get_object(4)->down->index, 7);

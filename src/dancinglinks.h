@@ -72,9 +72,9 @@ class DancingLinks {
 
   void create_matrix(TheBoard const& board);
 
-  void make_row(std::vector<uint16_t> const& data);
+  void make_row(std::vector<uint16_t> const& data, std::shared_ptr<ColumnObj>& temp_spacer);
 
-  std::shared_ptr<ColumnObj> get_last_spacer();
+  std::shared_ptr<ColumnObj>const& get_last_spacer();
 
   std::shared_ptr<ColumnObj> get_start_spacer_from(
       std::shared_ptr<ColumnObj> const& obj) const;
@@ -82,6 +82,7 @@ class DancingLinks {
   void print() const;
 
  private:
+  std::shared_ptr<ColumnObj> last_spacer{nullptr};
   constexpr static int number_of_leters{35};
   constexpr static int ascii_code_for_A{65};
   std::shared_ptr<ColumnObj> root{std::make_shared<ColumnObj>()};

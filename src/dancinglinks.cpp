@@ -58,7 +58,7 @@ void DancingLinks::create_matrix(
     std::map<size_t, std::vector<uint16_t>> const& board) {
   make_header(board.at(0).size());
   for (auto& [index, data] : board) {
-    make_row(data);
+    make_row(data, last_spacer);
   }
   std::for_each(objs.begin(), objs.begin() + get_header_size(),
                 [this](std::shared_ptr<ColumnObj>& header) {
@@ -67,19 +67,19 @@ void DancingLinks::create_matrix(
                   header->up = last;
                   last->down = header;
                 });
-  auto last_spacer = std::make_shared<ColumnObj>();
-  last_spacer->up = get_object(get_last_spacer()->index + 1);
-  last_spacer->top_spacer = spacer_counter--;
-  last_spacer->index = objs.back()->index + 1;
-  objs.push_back(last_spacer);
+  auto temp_last_spacer = std::make_shared<ColumnObj>();
+  temp_last_spacer->up = get_object(last_spacer->index + 1);
+  temp_last_spacer->top_spacer = spacer_counter--;
+  temp_last_spacer->index = objs.back()->index + 1;
+  objs.push_back(temp_last_spacer);
+  last_spacer = temp_last_spacer;
 }
 
-void DancingLinks::make_row(std::vector<uint16_t> const& data) {
+void DancingLinks::make_row(std::vector<uint16_t> const& data, std::shared_ptr<ColumnObj>& last_spacer) {
   assert(data.size() == header_size);
 
   size_t last_index{objs.back()->index};
   std::shared_ptr<ColumnObj> spacer = std::make_shared<ColumnObj>();
-  auto last_spacer = get_last_spacer();
   if (last_spacer and last_spacer->index != last_index) {
     spacer->up = get_object(last_spacer->index + 1);
   }
@@ -88,7 +88,7 @@ void DancingLinks::make_row(std::vector<uint16_t> const& data) {
   objs.push_back(spacer);
 
   std::shared_ptr<ColumnObj> last_obj;
-  for (size_t i = 0; i < data.size(); ++i) {
+  for (size_t i = 0; i < header_size; ++i) {
     if (data.at(i) == 1) {
       std::shared_ptr<ColumnObj>& header = objs.at(i);
       auto last = header->down == nullptr ? header : get_last(header);
@@ -102,13 +102,11 @@ void DancingLinks::make_row(std::vector<uint16_t> const& data) {
     }
   }
   spacer->down = last_obj;
+  last_spacer = spacer;
 }
 
-std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_last_spacer() {
-  auto result = std::find_if(
-      objs.rbegin(), objs.rend(),
-      [](std::shared_ptr<ColumnObj>& obj) { return obj->top_spacer <= 0; });
-  return result == objs.rend() ? nullptr : *result;
+std::shared_ptr<DancingLinks::ColumnObj>const& DancingLinks::get_last_spacer() {
+    return last_spacer;
 }
 
 std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_start_spacer_from(
