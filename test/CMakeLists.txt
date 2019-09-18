@@ -9,6 +9,8 @@ download_project(
 
 add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 
+include_directories(${PROJECT_SOURCE_DIR}/src)
+
 add_executable(SerializerTest serializer_test.cpp)
 add_executable(DancingLinksTest dancinglinks_test.cpp utils.h)
 add_executable(DancingLinksSolverTest dancinglinks_solver_test.cpp utils.h)
