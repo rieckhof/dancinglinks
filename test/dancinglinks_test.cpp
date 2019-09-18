@@ -150,6 +150,27 @@ TEST(CreateBoard, create_empty_initial_board2) {
   expected_board.insert({5, {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0}});
   expected_board.insert({6, {0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0}});
   expected_board.insert({7, {0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1}});
+  DancingLinks dl;
+  dl.create_matrix(expected_board);
+  ASSERT_EQ(dl.get_last_spacer()->index, 45);
+
+  std::vector<std::vector<size_t>> all_expected_values{
+      {1,14,18},
+      {2,22,26},
+      {3,30,34},
+      {4,38,42},
+      {5,15,23},
+      {6,19,27},
+      {7,31,39},
+      {8,35,43},
+      {9,16,32},
+      {10,20,36},
+      {11,24,40},
+      {12,28,44},
+
+  };
+
+  check_all_directions(dl,all_expected_values);
 
   ASSERT_EQ(expected_board, b);
 }

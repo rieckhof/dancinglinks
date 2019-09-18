@@ -74,7 +74,7 @@ class DancingLinks {
 
   void make_row(std::vector<uint16_t> const& data, std::shared_ptr<ColumnObj>& temp_spacer);
 
-  std::shared_ptr<ColumnObj>const& get_last_spacer();
+  std::shared_ptr<ColumnObj>& get_last_spacer();
 
   std::shared_ptr<ColumnObj> get_start_spacer_from(
       std::shared_ptr<ColumnObj> const& obj) const;
