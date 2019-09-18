@@ -25,12 +25,7 @@ int32_t DancingLinks::get_header_size() const {
   return static_cast<int32_t>(header_size);
 }
 
-DancingLinks::DancingLinks() {  //: letters(number_of_leters){
-  //    int begin (ascii_code_for_A);
-  //    std::generate_n(letters.begin(), number_of_leters, [&begin](){
-  //        return static_cast<char>(begin++);
-  //    });
-}
+DancingLinks::DancingLinks() = default;
 
 void DancingLinks::make_header(size_t size) {
   std::shared_ptr<ColumnObj> last = root;
@@ -54,25 +49,30 @@ std::shared_ptr<DancingLinks::ColumnObj> DancingLinks::get_object(
   return objs.at(index - 1);
 }
 
+void DancingLinks::finalize_construction()
+{
+    std::for_each(objs.begin(), objs.begin() + get_header_size(),
+                  [this](std::shared_ptr<ColumnObj>& header) {
+                    header->size = count_elements_start_header(header);
+                    auto last = get_last(header);
+                    header->up = last;
+                    last->down = header;
+                  });
+    auto temp_last_spacer = std::make_shared<ColumnObj>();
+    temp_last_spacer->up = get_object(last_spacer->index + 1);
+    temp_last_spacer->top_spacer = spacer_counter--;
+    temp_last_spacer->index = objs.back()->index + 1;
+    objs.push_back(temp_last_spacer);
+    last_spacer = temp_last_spacer;
+}
+
 void DancingLinks::create_matrix(
     std::map<size_t, std::vector<uint16_t>> const& board) {
   make_header(board.at(0).size());
   for (auto& [index, data] : board) {
     make_row(data, last_spacer);
   }
-  std::for_each(objs.begin(), objs.begin() + get_header_size(),
-                [this](std::shared_ptr<ColumnObj>& header) {
-                  header->size = count_elements_start_header(header);
-                  auto last = get_last(header);
-                  header->up = last;
-                  last->down = header;
-                });
-  auto temp_last_spacer = std::make_shared<ColumnObj>();
-  temp_last_spacer->up = get_object(last_spacer->index + 1);
-  temp_last_spacer->top_spacer = spacer_counter--;
-  temp_last_spacer->index = objs.back()->index + 1;
-  objs.push_back(temp_last_spacer);
-  last_spacer = temp_last_spacer;
+  finalize_construction();
 }
 
 void DancingLinks::make_row(std::vector<uint16_t> const& data, std::shared_ptr<ColumnObj>& last_spacer) {
@@ -357,7 +357,7 @@ TheBoard SudokuAdapter::create_initial_board(SodokuMap const& map) {
   return b;
 }
 
-DancingLinks SudokuAdapter::create_initial_board2(SodokuMap const& map) {
+DancingLinks SudokuAdapter::create_dl_matrix(SodokuMap const& map) {
   DancingLinks dl;
 
   if (sqrt_from_size * sqrt_from_size == board_size) {
@@ -419,9 +419,9 @@ DancingLinks SudokuAdapter::create_initial_board2(SodokuMap const& map) {
       col_vs_row = 0;
     }
 
-//    b.insert({row_index, std::move(row)});
     dl.make_row(row, dl.get_last_spacer());
   }
+  dl.finalize_construction();
   return dl;
 }
 

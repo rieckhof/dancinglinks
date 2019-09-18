@@ -19,8 +19,9 @@ class DancingLinksSolver {
   void unhide(std::shared_ptr<ColumnObj>& p);
 
  public:
-  DancingLinks dl;
+  std::unique_ptr<DancingLinks> dl;
   DancingLinksSolver(std::map<size_t, std::vector<uint16_t>> const& board);
+  DancingLinksSolver(DancingLinks& p_dl);
 
   std::vector<SodokuMap> create_sudoku_solved(SudokuAdapter const& b) const;
 

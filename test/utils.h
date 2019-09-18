@@ -32,7 +32,7 @@ void check_all(std::shared_ptr<DancingLinks::ColumnObj> const& iterator,
   result.push_back(iterator->index);
   auto temp = create_test_results(iterator->down, iterator, iterate_down);
   result.insert(result.end(), temp.begin(), temp.end());
-  EXPECT_EQ(result, expected_values);
+  EXPECT_EQ(result, expected_values) << "Down Failed" << "\n"; ;
 }
 
 void check_all_up(std::shared_ptr<DancingLinks::ColumnObj> const& iterator,
@@ -41,7 +41,7 @@ void check_all_up(std::shared_ptr<DancingLinks::ColumnObj> const& iterator,
   result.push_back(iterator->index);
   auto temp = create_test_results(iterator->up, iterator, iterate_up);
   result.insert(result.end(), temp.begin(), temp.end());
-  EXPECT_EQ(result, expected_values);
+  EXPECT_EQ(result, expected_values) << "Up Right Failed" << "\n";
 }
 
 void check_all_directions(
@@ -52,15 +52,14 @@ void check_all_directions(
     check_all(iterator, expected);
     iterator = iterator->right;
   }
-  EXPECT_EQ(iterator, dl.get_root());
-
+  EXPECT_EQ(iterator, dl.get_root()) << "Down right OK" << "\n";
   iterator = dl.get_root()->left;
   std::reverse(all_expected_values.begin(), all_expected_values.end());
   for (auto& expected : all_expected_values) {
     check_all(iterator, expected);
     iterator = iterator->left;
   }
-  EXPECT_EQ(iterator, dl.get_root());
+  EXPECT_EQ(iterator, dl.get_root()) << "Down left OK" << "\n";
 
   std::reverse(all_expected_values.begin(), all_expected_values.end());
   iterator = dl.get_root()->right;

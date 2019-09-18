@@ -16,15 +16,15 @@ int main(int argc, char** argv) {
 
   std::cout << "  Reading " << argv[1] << "\n";
   size_t size = sudoku::serializer::deserialize(p, map);
-  SudokuAdapter c(size);
-  TheBoard b = c.create_initial_board(map);
+  SudokuAdapter adapter(size);
+  DancingLinks dl = adapter.create_dl_matrix(map);
   std::cout << "  Starting Solver "
             << "\n";
 
-  DancingLinksSolver dls(b);
+  DancingLinksSolver dls(dl);
   int level(0);
   dls.solve_algo_X(level);
-  std::vector<SodokuMap> sol(dls.create_sudoku_solved(c));
+  std::vector<SodokuMap> sol(dls.create_sudoku_solved(adapter));
   if (sol.empty()){
     std::cout << "  No solution found"
               << "\n";
