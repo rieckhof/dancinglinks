@@ -36,7 +36,9 @@ class DancingLinks {
   int32_t get_header_size() const;
 
   DancingLinks();
-
+  DancingLinks(DancingLinks const& other);
+  DancingLinks& operator=(DancingLinks other);
+  //TODO add move special funct
   ~DancingLinks();
 
   void make_header(size_t size);
@@ -57,11 +59,11 @@ class DancingLinks {
   void finalize_construction();
 
 private:
-  std::shared_ptr<ColumnObj> last_spacer{nullptr};
   constexpr static int number_of_leters{35};
   constexpr static int ascii_code_for_A{65};
+
+  std::shared_ptr<ColumnObj> last_spacer{nullptr};
   std::shared_ptr<ColumnObj> root{std::make_shared<ColumnObj>()};
-  //    std::vector<char> letters;
   size_t header_size{0};  // no root
   int spacer_counter{0};
   std::vector<std::shared_ptr<ColumnObj>> objs;  // begin() ColumnObj->index = 1
@@ -84,6 +86,9 @@ class SudokuAdapter {
   size_t calculate_row_index(size_t index4board) const;
 
   size_t calculate_column_index(size_t index4board) const;
+
+  template<class Callable>
+  void create_rows_dl_matrix(SodokuMap const& map, Callable const& inserter);
 
  public:
   SudokuAdapter(const size_t board_size)

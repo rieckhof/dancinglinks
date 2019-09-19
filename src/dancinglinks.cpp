@@ -27,6 +27,23 @@ int32_t DancingLinks::get_header_size() const {
 
 DancingLinks::DancingLinks() = default;
 
+DancingLinks::DancingLinks(DancingLinks const& other)
+    : last_spacer(other.last_spacer),
+      root(other.root),
+      header_size(other.header_size),
+      spacer_counter(other.spacer_counter),
+      objs(other.objs)
+{}
+
+DancingLinks& DancingLinks::operator=(DancingLinks other){
+    std::swap(other.root, root);
+    std::swap(other.last_spacer, last_spacer);
+    std::swap(other.header_size, header_size);
+    std::swap(other.spacer_counter, spacer_counter);
+    std::swap(other.objs, objs);
+    return *this;
+}
+
 void DancingLinks::make_header(size_t size) {
   std::shared_ptr<ColumnObj> last = root;
   for (size_t i = 0; i < size; ++i) {
@@ -241,8 +258,6 @@ std::vector<SodokuMap> SudokuAdapter::create_sudoku_solved(
     std::vector<std::vector<size_t>> const& solutions) const {
   std::vector<SodokuMap> result;
   for (auto& solution_indexes : solutions) {
-    std::vector<uint16_t> complete_solution;
-    std::vector<uint16_t> solution_part;
     SodokuMap sol;
     for (size_t const& index4board : solution_indexes) {
       size_t row_index(calculate_row_index(index4board));
@@ -294,135 +309,89 @@ uint16_t calculate_value_to_set(uint16_t const val_temp,
 
 TheBoard SudokuAdapter::create_initial_board(SodokuMap const& map) {
   TheBoard b;
-
   if (sqrt_from_size * sqrt_from_size == board_size) {
     constraints++;
   }
-
-  size_t current_value(0);
-  size_t current_row(0);
-  size_t current_col(0);
-  size_t col_vs_row(0);
-  size_t& colum_index_sodoku = current_row;
-  size_t row_index_sodoku(0);
-  for (size_t row_index = 0; row_index < std::pow(board_size, 3); ++row_index) {
-    //        std::cout << "val " << current_value +1 << std::endl;
-    //        std::cout << "col " << colum_index_sodoku % board_size <<
-    //        std::endl; std::cout << "row " << row_index_sodoku << std::endl;
-    //        std::cout << std::endl;
-    auto val_temp = map.at(std::to_string(row_index_sodoku) +
-                           std::to_string(colum_index_sodoku % board_size));
-    uint16_t value_to_set = calculate_value_to_set(val_temp, current_value + 1);
-
-    size_t constraint_counter(1);
-    std::vector<uint16_t> row(matrix_size * constraints, 0);
-    // constraint Row-Column
-    row.at(current_row) = value_to_set;
-
-    // constraint Row
-    size_t index_offset(matrix_size * constraint_counter);
-    size_t col_index{(index_offset + current_value + current_col)};
-    row.at(col_index) = value_to_set;
-    ++constraint_counter;
-
-    // constraint Column
-    size_t index_offset_c(matrix_size * constraint_counter);
-    row.at(index_offset_c + col_vs_row) = value_to_set;
-
-    if (constraints == 4) {
-      ++constraint_counter;
-      auto box = get_box_index(row_index, board_size, sqrt_from_size);
-      assert(box != -1);
-      size_t index_offset_const(matrix_size * constraint_counter);
-      auto box_index = box * board_size;
-      auto index_inside_box = col_vs_row % board_size;
-      row.at(index_offset_const + box_index + index_inside_box) = value_to_set;
-    }
-
-    ++current_value;
-    if (current_value == board_size) {
-      current_value = 0;
-      ++current_row;
-    }
-
-    ++col_vs_row;
-    if (col_vs_row == matrix_size) {
-      row_index_sodoku++;
-      current_col += board_size;
-      col_vs_row = 0;
-    }
-
-    b.insert({row_index, std::move(row)});
-  }
+  create_rows_dl_matrix(map,
+            [&b](std::vector<uint16_t>& row, size_t row_index){
+                b.insert({row_index, std::move(row)});
+            });
   return b;
 }
 
 DancingLinks SudokuAdapter::create_dl_matrix(SodokuMap const& map) {
   DancingLinks dl;
-
   if (sqrt_from_size * sqrt_from_size == board_size) {
     constraints++;
   }
-
-  size_t current_value(0);
-  size_t current_row(0);
-  size_t current_col(0);
-  size_t col_vs_row(0);
-  size_t& colum_index_sodoku = current_row;
-  size_t row_index_sodoku(0);
-
   dl.make_header(matrix_size * constraints);
-  for (size_t row_index = 0; row_index < std::pow(board_size, 3); ++row_index) {
-    //        std::cout << "val " << current_value +1 << std::endl;
-    //        std::cout << "col " << colum_index_sodoku % board_size <<
-    //        std::endl; std::cout << "row " << row_index_sodoku << std::endl;
-    //        std::cout << std::endl;
-    auto val_temp = map.at(std::to_string(row_index_sodoku) +
-                           std::to_string(colum_index_sodoku % board_size));
-    uint16_t value_to_set = calculate_value_to_set(val_temp, current_value + 1);
-
-    size_t constraint_counter(1);
-    std::vector<uint16_t> row(matrix_size * constraints, 0);
-    // constraint Row-Column
-    row.at(current_row) = value_to_set;
-
-    // constraint Row
-    size_t index_offset(matrix_size * constraint_counter);
-    size_t col_index{(index_offset + current_value + current_col)};
-    row.at(col_index) = value_to_set;
-    ++constraint_counter;
-
-    // constraint Column
-    size_t index_offset_c(matrix_size * constraint_counter);
-    row.at(index_offset_c + col_vs_row) = value_to_set;
-
-    if (constraints == 4) {
-      ++constraint_counter;
-      auto box = get_box_index(row_index, board_size, sqrt_from_size);
-      assert(box != -1);
-      size_t index_offset_const(matrix_size * constraint_counter);
-      auto box_index = box * board_size;
-      auto index_inside_box = col_vs_row % board_size;
-      row.at(index_offset_const + box_index + index_inside_box) = value_to_set;
-    }
-
-    ++current_value;
-    if (current_value == board_size) {
-      current_value = 0;
-      ++current_row;
-    }
-
-    ++col_vs_row;
-    if (col_vs_row == matrix_size) {
-      row_index_sodoku++;
-      current_col += board_size;
-      col_vs_row = 0;
-    }
-
-    dl.make_row(row, dl.get_last_spacer());
-  }
+  create_rows_dl_matrix(map,
+                [&dl](std::vector<uint16_t>& row, size_t row_index){
+                    (void) row_index;
+                    dl.make_row(row, dl.get_last_spacer());
+                });
   dl.finalize_construction();
   return dl;
+}
+
+template<class Callable>
+void SudokuAdapter::create_rows_dl_matrix(SodokuMap const& map, Callable const& inserter){
+
+    size_t current_value(0);
+    size_t current_row(0);
+    size_t current_col(0);
+    size_t col_vs_row(0);
+    size_t& colum_index_sodoku = current_row;
+    size_t row_index_sodoku(0);
+
+    for (size_t row_index = 0; row_index < std::pow(board_size, 3); ++row_index) {
+      //        std::cout << "val " << current_value +1 << std::endl;
+      //        std::cout << "col " << colum_index_sodoku % board_size <<
+      //        std::endl; std::cout << "row " << row_index_sodoku << std::endl;
+      //        std::cout << std::endl;
+      auto val_temp = map.at(std::to_string(row_index_sodoku) +
+                             std::to_string(colum_index_sodoku % board_size));
+      uint16_t value_to_set = calculate_value_to_set(val_temp, current_value + 1);
+
+      size_t constraint_counter(1);
+      std::vector<uint16_t> row(matrix_size * constraints, 0);
+      // constraint Row-Column
+      row.at(current_row) = value_to_set;
+
+      // constraint Row
+      size_t index_offset(matrix_size * constraint_counter);
+      size_t col_index{(index_offset + current_value + current_col)};
+      row.at(col_index) = value_to_set;
+      ++constraint_counter;
+
+      // constraint Column
+      size_t index_offset_c(matrix_size * constraint_counter);
+      row.at(index_offset_c + col_vs_row) = value_to_set;
+
+      if (constraints == 4) {
+        ++constraint_counter;
+        auto box = get_box_index(row_index, board_size, sqrt_from_size);
+        assert(box != -1);
+        size_t index_offset_const(matrix_size * constraint_counter);
+        auto box_index = static_cast<size_t>(box) * board_size;
+        auto index_inside_box = col_vs_row % board_size;
+        row.at(index_offset_const + box_index + index_inside_box) = value_to_set;
+      }
+
+      ++current_value;
+      if (current_value == board_size) {
+        current_value = 0;
+        ++current_row;
+      }
+
+      ++col_vs_row;
+      if (col_vs_row == matrix_size) {
+        row_index_sodoku++;
+        current_col += board_size;
+        col_vs_row = 0;
+      }
+      inserter(row, row_index);
+    }
 }
 
 }  // namespace sudoku::dancinglinks
