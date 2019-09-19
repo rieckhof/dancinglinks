@@ -52,14 +52,14 @@ void check_all_directions(
     check_all(iterator, expected);
     iterator = iterator->right;
   }
-  EXPECT_EQ(iterator, dl.get_root()) << "Down right OK" << "\n";
+  EXPECT_EQ(iterator, dl.get_root()) << "Down right failed" << "\n";
   iterator = dl.get_root()->left;
   std::reverse(all_expected_values.begin(), all_expected_values.end());
   for (auto& expected : all_expected_values) {
     check_all(iterator, expected);
     iterator = iterator->left;
   }
-  EXPECT_EQ(iterator, dl.get_root()) << "Down left OK" << "\n";
+  EXPECT_EQ(iterator, dl.get_root()) << "Down left failed" << "\n";
 
   std::reverse(all_expected_values.begin(), all_expected_values.end());
   iterator = dl.get_root()->right;

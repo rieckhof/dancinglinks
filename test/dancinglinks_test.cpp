@@ -131,7 +131,6 @@ TEST(DancingLinks, SpacerTest) {
 
 TEST(CreateBoard, create_empty_initial_board2) {
   size_t board_size(2);
-  size_t should_lines(board_size * board_size * board_size);
   SudokuAdapter c(board_size);
   SodokuMap map;
   map.insert({"00", 0});
@@ -158,7 +157,6 @@ TEST(CreateBoard, create_empty_initial_board2) {
 
   check_all_directions(dl,all_expected_values);
 
-//  ASSERT_EQ(expected_board, b);
 }
 TEST(CreateBoard, create_initial_board2) {
   size_t board_size(2);
