@@ -131,27 +131,32 @@ TEST(DancingLinks, SpacerTest) {
 
 TEST(CreateBoard, create_empty_initial_board2) {
   size_t board_size(2);
-  size_t should_lines(board_size * board_size * board_size);
   SudokuAdapter c(board_size);
   SodokuMap map;
   map.insert({"00", 0});
   map.insert({"01", 0});
   map.insert({"10", 0});
   map.insert({"11", 0});
-  TheBoard b = c.create_initial_board(map);
-  ASSERT_EQ(should_lines, b.size());
+  DancingLinks dl = c.create_dl_matrix(map);
+  ASSERT_EQ(dl.get_last_spacer()->index, 45);
 
-  TheBoard expected_board;
-  expected_board.insert({0, {1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0}});
-  expected_board.insert({1, {1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0}});
-  expected_board.insert({2, {0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0}});
-  expected_board.insert({3, {0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1}});
-  expected_board.insert({4, {0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0}});
-  expected_board.insert({5, {0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0}});
-  expected_board.insert({6, {0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0}});
-  expected_board.insert({7, {0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1}});
+  std::vector<std::vector<size_t>> all_expected_values{
+      {1,14,18},
+      {2,22,26},
+      {3,30,34},
+      {4,38,42},
+      {5,15,23},
+      {6,19,27},
+      {7,31,39},
+      {8,35,43},
+      {9,16,32},
+      {10,20,36},
+      {11,24,40},
+      {12,28,44},
+  };
 
-  ASSERT_EQ(expected_board, b);
+  check_all_directions(dl,all_expected_values);
+
 }
 TEST(CreateBoard, create_initial_board2) {
   size_t board_size(2);
