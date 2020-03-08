@@ -3,6 +3,11 @@ This is an implementation of the Dancing Links algorithm from Donald E. Knuth fo
 
 The implementation is using C++17. I compiled it in a Ubuntu 18.04 with gcc 9.1.
 
+
+
+
+
+
 ## How to build from Console:
 * Create a build folder inside the checkout repository
 * From inside build do `cmake ..`
